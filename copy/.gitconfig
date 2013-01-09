@@ -1,0 +1,22 @@
+[core]
+	excludesfile = /Users/td23/.gitignore
+
+[alias] 
+  st = status
+  com = commit
+  co = checkout
+  br = branch -avv
+  w = whatchanged
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  re = remote -vv
+
+[color] 
+  diff = auto
+  interactive = auto
+  status = auto
+  branch = auto
+  ui = true
+  pager = true
+

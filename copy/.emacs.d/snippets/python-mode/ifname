@@ -1,0 +1,7 @@
+#key: ifname
+#name: ifname boilerplate
+#contributor: Todd DeLuca
+# prints an if __name__ == ...
+# --
+if __name__ == '__main__':
+    main()

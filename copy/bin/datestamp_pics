@@ -1,0 +1,192 @@
+#!/usr/bin/env python2.7
+
+'''
+add datetime to name of pictures, so that even if pics are modified, e.g. by rotation, original date is still accessible to me.
+yyyymmdd_hhmmss_ prepended to name.
+Python rename operation preserved last modified timestamp.  yay.
+testing shows that (on this G5 iMac connecting to a "ext2" external hard drive) the last modified time 
+returned by os.stat() can be translated by time.ctime() accurately.  So it represents seconds since the "epoch", Jan 1, 1970.
+command to read JPG and MPG files from a dir, get the modification date and time of each file and rename each file with the datetime prepended.
+'''
+
+import argparse
+import glob
+import hashlib
+import itertools
+import os
+import re
+import shutil
+import sys
+import time
+
+
+UNFILED_DIR = '/Users/td23/Pictures/unfiled'
+
+
+def paths_on_camera(camera_dir, subdir, pattern):
+    adir = os.path.join(camera_dir, subdir)
+    if not os.path.exists(adir):
+        raise Exception('Directory does not exist', adir)
+    paths = glob.glob(os.path.join(adir, pattern))
+    return paths
+
+
+def pics_on_camera(camera_dir):
+    return paths_on_camera(camera_dir, 'DCIM/100MSDCF', '*.JPG') 
+
+
+def movies_on_camera(camera_dir):
+    return paths_on_camera(camera_dir, 'MP_ROOT/100ANV01', '*.MP4')
+
+
+def same_file(path1, path2):
+    with open(path1, 'rb') as fh1, open(path2, 'rb') as fh2:
+        return hashlib.md5(fh1.read()).hexdigest() == hashlib.md5(fh2.read()).hexdigest()
+
+
+def is_datetime_on_basename(path):
+    try:
+        time.strptime(os.path.basename(path)[:15], "%Y%m%d_%H%M%S") # '20120513_142759' 24-hour time
+        return True
+    except Exception:
+       return False
+
+
+def prepend_datetime_to_basename(path):
+    '''
+    Prepend the datetime of the file to the basename of the file
+    path: e.g. '/Volumes/NO NAME 1/DCIM/100MSDCF/DSC00855.JPG'
+    '''
+    # get the new filenames which start with the file modification time.
+    mtime = os.stat(path).st_mtime
+    mtimeString = time.strftime("%Y%m%d_%H%M%S", time.localtime(mtime)) # e.g. '20120527_145336'
+    return os.path.join(os.path.dirname(path), mtimeString + '_' + os.path.basename(path))
+    
+
+def add_missing_datetime(path):
+    if not is_datetime_on_basename(path):
+        return prepend_datetime_to_basename(path)
+    else:
+        return path
+
+
+def rename_remove_or_fail_paths(path_pairs):
+    '''
+    Rename each source path to the dest path unless the dest path exists.  If
+    it exists and is the same (content-wise) as the source remove the source.
+    If it is different, raise an Exception.
+    '''
+    for sp, dp in path_pairs:
+        if not os.path.exists(dp):
+            print 'rename', sp, dp
+            os.rename(sp, dp)
+        elif same_file(sp, dp):
+            print 'remove', sp
+            os.remove(sp)
+        else:
+            raise Exception('Can not rename file because new filename exists and is different from the old filename.', sp, dp)
+
+
+def unfiled_rename_pics():
+    '''
+    Rename files in the 'unfiled' dir that do not have a datetime stamp in
+    their names so that they have a datetime stamp in their names.
+    '''
+    dirpath = UNFILED_DIR
+    # files that are missing datetime
+    paths = glob.glob(os.path.join(dirpath, '*.[JM]PG')) + glob.glob(os.path.join(dirpath, '*.MP4'))
+    spaths = [p for p in paths if os.path.isfile(p) and not is_datetime_on_basename(p)]
+    dpaths = [add_missing_datetime(f) for f in spaths]
+    rename_remove_or_fail_paths(zip(spaths, dpaths))
+
+
+def unfiled_2011_to_2012():
+    '''
+    Dang!  The year on the camera date was wrong.  Now there are a whole bunch
+    of pics from 2012 that are dated from 2011.  Fix all the dates in the
+    filenames to 2012.
+    '''
+    dirpath = UNFILED_DIR
+    # files that start with 2011
+    spaths = glob.glob(os.path.join(dirpath, '2011*'))
+    dpaths = [os.path.join(os.path.dirname(f), '2012' + os.path.basename(f)[4:]) for f in spaths]
+    rename_remove_or_fail_paths(zip(spaths, dpaths))
+
+
+def main():
+
+    parser = argparse.ArgumentParser(description='Copy files from camera to computer, adding datetime stamps to filenames.')
+    parser.add_argument('-f', '--force', action='store_true', default=False, help='overwrite existing files')
+    parser.add_argument('path', default='/Users/td23/Pictures/unfiled', nargs='?', help='location of working dir in which to copy files')
+    args = parser.parse_args()
+
+    abort = False
+    force = args.force
+    path = os.path.abspath(args.path)
+    unfiled_dir = path
+
+    print 'abort:', abort
+    print 'force:', force
+
+    # get the picture and movie files on the camera
+    cdirs = ['/Volumes/NO NAME', '/Volumes/NO NAME 1']
+    print 'Pictures and Movies found on the camera:'
+    cdir = cdirs[1]
+    cpaths = pics_on_camera(cdir) + movies_on_camera(cdir)
+    for p in cpaths:
+        print p
+
+    # get the destination paths in the unfiled dir, including the datetime in the path basename.
+    upaths = [os.path.join(unfiled_dir, os.path.basename(add_missing_datetime(p))) for p in cpaths]
+    for p in upaths:
+        print p
+
+    # check if destination files exist already
+    for p in upaths:
+        if os.path.exists(p):
+           print 'unfiled path exists already: {}'.format(p)
+           if not force:
+               abort = True
+
+    if abort:
+        print 'Use --force or -f option to overwrite existing files'
+        sys.exit(1)
+
+
+    print 'no unfiled paths found.'
+    print 'preparing to copy.'
+
+
+    diff_files = set() # existing upaths that are the different from cpaths
+    same_files = set() # existing upaths with the same contents as cpaths
+    for cpath, upath in zip(cpaths, upaths):
+        if os.path.exists(upath):
+            print 'examining {}'.format(upath)
+            if same_file(cpath, upath):
+                same_files.add(upath)
+            else:
+                diff_files.add(upath)
+
+    if diff_files:
+        print 'Differing files!', diff_files
+        sys.exit(1)
+
+    for cpath, upath in zip(cpaths, upaths):
+        if upath in same_files:
+            print 'Same files.  Not copying {} to {}.'.format(cpath, upath)
+        elif upath in diff_files:
+            print 'Differing files!  Not copying {} to {}.'.format(cpath, upath)
+        else:
+            print 'Copying {} to {}.'.format(cpath, upath)
+            shutil.copy2(cpath, upath)
+
+    # todo:  remove copied files 
+    # todo:  copy files from unfiled to the right date-based directory in Pictures
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+

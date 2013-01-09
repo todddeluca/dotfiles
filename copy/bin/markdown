@@ -1,0 +1,23 @@
+#!/usr/bin/ruby -rubygems
+# Set shebang to absolute path of ruby version 1.8 (Mac OS X 10.6) so script
+# can be executed w/o RUBYOPTS env var set.
+
+require 'redcarpet'
+
+# ARGF reads from stdin or from files passed via ARGV.
+# http://blog.bogojoker.com/2008/11/data-and-argf-in-ruby/
+contents = ARGF.read
+
+# render markdown as html, using some "extra". 
+# See https://github.com/tanoku/redcarpet for more info.
+markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML,
+                                  :autolink => true, 
+                                  :space_after_headers => true,
+                                  :no_intra_emphasis => true,
+                                  :fenced_code_blocks => true)
+
+puts markdown.render(contents)
+
+
+
+

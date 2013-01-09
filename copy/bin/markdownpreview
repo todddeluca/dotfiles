@@ -1,0 +1,27 @@
+#!/usr/bin/env python2.7
+
+'''
+Read markdown from a file (or stdin).
+Use markdown executable to turn it into html
+Save html to a tmp file (same one each time)
+and open in a browser.
+'''
+
+import os
+import subprocess
+import sys
+
+# read markdown from a stream
+if len(sys.argv) > 1:
+    mdfile = sys.argv[1]
+    fh = open(mdfile)
+else:
+    fh = sys.stdin
+
+# save html output here
+tmpfile = os.path.expanduser('~/tmp/markdown.html')
+print tmpfile
+# mark up the markdown, save it, and display it.
+cmd = 'markdown > {} && open {}'.format(tmpfile, tmpfile)
+print subprocess.call(cmd, shell=True, stdin=fh)
+

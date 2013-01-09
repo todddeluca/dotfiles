@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# install my orchestra crontab on, ah, orchestra.  Duh.
+rsync ~/work/cron/td23_crontab td23@orchestra.med.harvard.edu:tmp/
+ssh -t td23@orchestra.med.harvard.edu crontab tmp/td23_crontab
+
+

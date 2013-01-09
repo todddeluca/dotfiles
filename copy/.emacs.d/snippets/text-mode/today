@@ -1,0 +1,7 @@
+#key: today
+#name: today h1 header
+#contributor: Todd DeLuca
+# prints a markdown h1 header with the current date
+# --
+==========
+`(shell-command-to-string "date +%Y-%m-%d")`==========

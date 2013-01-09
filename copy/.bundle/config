@@ -1,0 +1,2 @@
+---
+BUNDLE_BUILD__IGRAPH: --with-igraph-include=/usr/local/include/igraph
