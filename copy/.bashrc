@@ -1,6 +1,4 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
 
 # If running interactively, then:
 if [ "$PS1" ]; then
@@ -19,7 +17,7 @@ if [ "$PS1" ]; then
     # update the values of LINES and COLUMNS.
     # shopt -s checkwinsize
 
-    # make less more friendly for non-text input files, see lesspipe(1)
+    # make less friendlier for non-text input files.  see lesspipe(1)
     [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
     # set variable identifying the chroot you work in (used in the prompt below)
@@ -153,7 +151,9 @@ if [ "$PS1" ]; then
     # alias historyn='history | awk '\''{$1="";$0=substr($0,2)}1'\'''
 
     # mount, grep, and unmount secrets
-    function grepsec { open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && grep "$1" /Volumes/secrets/secrets.txt | less ; diskutil eject /Volumes/secrets ; }
+    function grepsec { 
+      open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && grep "$1" /Volumes/secrets/secrets.txt | less ; diskutil eject /Volumes/secrets ;
+    }
 
     # open emacs read only
     ev() {
@@ -165,8 +165,6 @@ if [ "$PS1" ]; then
     # add creds for sshing to ec2 instances.
     ssh-add ~/.ssh/cbi-AWS-US-East.pem 2>/dev/null
 
-    # use ruby environment manager.  Load the default ruby.
-    # [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 fi
 
 
@@ -186,6 +184,7 @@ export GROUP=staff
 # Set up amazon ec2 tools
 export EC2_HOME=/Applications/ec2-api-tools-1.3-57419
 export EC2_AMITOOL_HOME=/Applications/ec2-ami-tools-1.3-56066
+
 
 ####################
 # Secret Credentials
@@ -211,11 +210,11 @@ fi
 # The first thing appended has precedence of latter things appended.
 
 # PREPEND
-# Pip installer location for python3
+# Executables for python3 are sometimes installed here, e.g. pip3.
 PATH="/usr/local/share/python3:$PATH"
 # Where pip installer puts pip, based on hombrew python install.
 PATH="/usr/local/share/python:$PATH"
-# Setting PATH for local installs, like python2.7
+# Setting PATH for local installs, like python3
 PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 # Setting PATH for my bin
 PATH="~/bin:$PATH"
@@ -233,24 +232,14 @@ PATH="$PATH:/Applications/Octave.app/Contents/Resources/bin"
 # PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 # rbenv
 PATH="$PATH:$HOME/.rbenv/bin"
+# Homebrew Ruby Gem binaries default install location
+# see 'brew info ruby'
+PATH="$PATH:/usr/local/Cellar/ruby/1.9.3-p362/bin"
 
-
-export PATH
-export VISUAL="mvim -f"
-
-# Configure the system-wide python GeneHawk uses for creating a virtualenv on
-# localhost.
-export GENEHAWK_SYSTEM_PYTHON=/usr/local/bin/python
-
-# Setting PATH for MacPython 2.5
-PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:${PATH}"
-# Setting PATH for MacPython 2.6
-PATH="/Library/Frameworks/Python.framework/Versions/2.6/bin:${PATH}"
 # Setting PATH for Python 2.7
-PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+# PATH="/System/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
 # Setting PATH for mzscheme
 PATH="/Applications/PLT Scheme v4.2.4/bin:${PATH}"
-export PATH
 
 # Nvidia CUDA
 export PATH="/Developer/NVIDIA/CUDA-5.0/bin:$PATH"
@@ -258,14 +247,21 @@ export PATH="/Developer/NVIDIA/CUDA-5.0/bin:$PATH"
 # makes various things complain, like `brew doctor` and `diskutil`.
 # export DYLD_LIBRARY_PATH="/Developer/NVIDIA/CUDA-5.0/lib:${DYLD_LIBRARY_PATH}"
 
-# Setting JAVA_HOME to JDK 1.6, for compiling genotator pipeline.
-export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
+export PATH
+
+# Configure the system-wide python GeneHawk uses for creating a virtualenv on
+# localhost.
+export GENEHAWK_SYSTEM_PYTHON=/usr/local/bin/python
+
 
 # something to make mac os x and MySQLdb play nicely.
 # http://stackoverflow.com/questions/4559699/python-mysqldb-and-library-not-loaded-libmysqlclient-16-dylibq
 # I get complaints about setting this, especially from homebrew (e.g. on
 # 2012/09/11) so try commenting it out and see what breaks.
 # export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/mysql/lib
+
+# Use MacVim to edit git commit messages, etc.
+export VISUAL="mvim -f"
 
 # use /usr/bin/vim instead of vim to fix non-zero exit code when using vim to edit git 
 # commit messages.  Why does this work?
@@ -279,8 +275,10 @@ export LESS='-R'
 # 1.8 is the ruby version in /usr/bin in Mac OS X 10.6 snow leopard 
 # export RUBYOPT="rubygems"
 
-# rbenv
-eval "$(rbenv init -)"
+# initialize rbenv
+if which rbenv > /dev/null ; then 
+  eval "$(rbenv init -)"; 
+fi
 
 
 
