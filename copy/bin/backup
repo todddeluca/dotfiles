@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+
+import argparse
+import os
+import subprocess
+
+HOME = os.path.expanduser('~')
+
+
+def run(cmd):
+    print(cmd)
+    return subprocess.check_call(cmd, shell=True)
+
+
+def backup_data():
+    run('rsync -avzhP --stats {home}/data td23@orchestra.med.harvard.edu:/groups/cbi/td23/'.format(home=HOME))
+
+
+def backup_media():
+    run('rsync -avhP --stats {home}/Movies /Volumes/pietown'.format(home=HOME))
+    run('rsync -avhP --stats {home}/Music /Volumes/pietown'.format(home=HOME))
+    run('rsync -avhP --stats {home}/Pictures /Volumes/pietown'.format(home=HOME))
+
+
+def main():
+
+    parser = argparse.ArgumentParser(description='Backup/Synchronize files.')
+    parser.add_argument('what', choices=['data', 'media'], 
+                        help='Backup data to orchestra or media to "pietown".')
+    args = parser.parse_args()
+    globals()['backup_' + args.what]()
+
+
+if __name__ == '__main__':
+    main()
