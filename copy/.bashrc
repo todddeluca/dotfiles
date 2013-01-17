@@ -261,7 +261,7 @@ export GENEHAWK_SYSTEM_PYTHON=/usr/local/bin/python
 # export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/mysql/lib
 
 # Use MacVim to edit git commit messages, etc.
-export VISUAL="mvim -f"
+# export VISUAL="mvim -f"
 
 # use /usr/bin/vim instead of vim to fix non-zero exit code when using vim to edit git 
 # commit messages.  Why does this work?

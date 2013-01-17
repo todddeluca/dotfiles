@@ -14,8 +14,11 @@ if [ "$1" = "bin" ]; then
   # since bin has no secrets, no need to rerun 'secrets'.
   rsync -av $DRYRUN "$DOTFILES/copy/bin" "$HOME"
 elif [ "$1" = "bashrc" ]; then
-  # since bashrc has no secrets, no need to rerun 'secrets'.
+  # since .bashrc has no secrets, no need to rerun 'secrets'.
   rsync -av $DRYRUN "$DOTFILES/copy/.bashrc" "$HOME"
+elif [ "$1" = "vimrc" ]; then
+  # since .vimrc has no secrets, no need to rerun 'secrets'.
+  rsync -av $DRYRUN "$DOTFILES/copy/.vimrc" "$HOME"
 elif [ "$1" = "vim" ]; then
   # install vim bundles
   if [[ -e "$HOME/.vim/install.py" ]] ; then

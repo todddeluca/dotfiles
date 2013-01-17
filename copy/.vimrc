@@ -43,8 +43,8 @@ filetype plugin indent on     " filetype detection, plugins, and indent files.
 """ Basic settings 
 set number                    " Display line numbers
 set numberwidth=1             " using only 1 column (and 1 space) while possible
-" colorscheme summerfruit256
-colorscheme Tomorrow-Night " https://github.com/chriskempson/tomorrow-theme
+colorscheme summerfruit256
+" colorscheme Tomorrow-Night " https://github.com/chriskempson/tomorrow-theme
 " colorscheme desert
 " colorscheme solarized         " set a nice colorscheme. 'desert' good too.
 set background=light          " We are using dark background in vim
