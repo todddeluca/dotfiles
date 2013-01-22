@@ -13,23 +13,42 @@ def run(cmd):
     return subprocess.check_call(cmd, shell=True)
 
 
-def backup_data():
-    run('rsync -avzhP --stats {home}/data td23@orchestra.med.harvard.edu:/groups/cbi/td23/'.format(home=HOME))
+def rsync(src, dest, compress=False, dry_run=False):
+    z = '-z' if compress else ''
+    dry = '--dry-run' if dry_run else ''
+    run('rsync {z} {dry} -avhP --stats {src} {dest}'.format(
+        z=z, dry=dry, src=src, dest=dest))
 
 
-def backup_media():
-    run('rsync -avhP --stats {home}/Movies /Volumes/pietown'.format(home=HOME))
-    run('rsync -avhP --stats {home}/Music /Volumes/pietown'.format(home=HOME))
-    run('rsync -avhP --stats {home}/Pictures /Volumes/pietown'.format(home=HOME))
+def backup_remote(dry_run=False):
+    rsync(HOME + '/data', 'td23@orchestra.med.harvard.edu:/groups/cbi/td23/',
+          compress=True, dry_run=dry_run)
+    # run('rsync -avzhP --stats {home}/data td23@orchestra.med.harvard.edu:/groups/cbi/td23/'.format(home=HOME))
+
+
+def backup_local(dry_run=False):
+    for direc in ['Movies', 'Music', 'Pictures']:
+        rsync(os.path.join(HOME, direc), '/Volumes/pietown/', dry_run=dry_run)
+    # run('rsync -avhP --stats {home}/Movies /Volumes/pietown'.format(home=HOME))
+    # run('rsync -avhP --stats {home}/Music /Volumes/pietown'.format(home=HOME))
+    # run('rsync -avhP --stats {home}/Pictures /Volumes/pietown'.format(home=HOME))
+
+
+def backup_again(dry_run=False):
+    rsync('/Volumes/pietown/Pictures', '/Volumes/chama', dry_run=dry_run)
+    # run('rsync -avhP --stats /Volumes/pietown/Pictures /Volumes/chama')
 
 
 def main():
-
     parser = argparse.ArgumentParser(description='Backup/Synchronize files.')
-    parser.add_argument('what', choices=['data', 'media'], 
-                        help='Backup data to orchestra or media to "pietown".')
+    parser.add_argument('what', choices=['local', 'remote', 'again'], 
+                        help='Backup data remotely to orchestra, media ' +
+                        'locally to "pietown", or backup pietown pictures ' +
+                        'again to chama')
+    parser.add_argument('--dry-run', action='store_true', help='Simulate ' +
+                        'backing up files without actually copying anything')
     args = parser.parse_args()
-    globals()['backup_' + args.what]()
+    globals()['backup_' + args.what](dry_run=args.dry_run)
 
 
 if __name__ == '__main__':
