@@ -1,0 +1,135 @@
+#!/usr/bin/env python
+
+'''
+Oddly enough, pip (as of version 1.2.1) does not have a way to upgrade all
+installed packages.  This script provides a way to do that.  YMMV with respect
+to how it handles packages installed with '-e' or using github urls, etc.
+
+Essentially it uses `pip freeze` to get all the packages, chopping off the 
+version number for each package, and then uses `pip install --upgrade` to
+upgrade each package.
+
+Since it uses `pip`, to work with a virtual environment, make sure pip from
+the virtual environment is first in the path.  Typically you would do this by
+activating the virtual environment.
+
+Some other people's suggestions for how to do this:
+http://stackoverflow.com/questions/2720014/upgrading-all-packages-with-pip
+'''
+
+import argparse
+import re
+import subprocess
+
+
+# This regex matches lines that have an exact double equals sign ('==') 
+# in them.  It will not match two equals signs within a longer string
+# of equals signs, e.g. '==='.
+# It matches on the rightmost double equals sign, and has groups 
+# for everything before the sign, the sign, and everythingafter the sign.
+DOUBLE_EQUALS_RE = re.compile(r"^(.*)(?<!=)(==)(?!=)(.*?)$")
+
+
+def has_double_equals(line):
+    '''
+    If line contains a double equals sign ('=='), return True.  Otherwise,
+    return False.  A double equals sign may not be part of a longer string
+    of equals signs, like '===' or '===='.
+    '''
+    return DOUBLE_EQUALS_RE.search(line) is not None
+
+
+def split_double_equals(line):
+    '''
+    If line contains at least one double equals sign ('=='), where '===',
+    '====', etc., are not considered to contain a double equals sign, split the
+    line on the rightmost double equals sign and return a tuple containing
+    everything left of the sign, the sign, and everything right of the sign.
+    If line does not contain a double equals sign, return line.
+    '''
+
+    m = DOUBLE_EQUALS_RE.search(line)
+    if m:
+        return m.groups()
+    else:
+        return line
+
+
+def test_double_equals():
+    '''
+    Output shows that it works correctly:
+
+        a a
+        a= a=
+        a== a
+        a=== a===
+        = =
+        ==
+        === ===
+        =a =a
+        ==a
+        ===a ===a
+        a=b a=b
+        a==b a
+        a===b a===b
+        a==b= a
+        a==b== a==b
+        a==b=== a
+        a==b=c a
+        a==b==c a==b
+        a==b===c a
+    '''
+    lines = ['a', 'a=', 'a==', 'a===', '=', '==', '===', '=a', '==a', '===a',
+    'a=b', 'a==b', 'a===b', 'a==b=', 'a==b==', 'a==b===', 'a==b=c', 'a==b==c',
+    'a==b===c', 'a==c\n']
+    for line in lines:
+        print line, has_double_equals(line), split_double_equals(line)
+
+
+def upgrade(local=False, dry_run=False, verbose=False):
+    '''
+    Uses 'pip freeze', so if you want to upgrade a virtualenv, activate it
+    to put its 'pip' on the path.  And you probably want to use local.
+    '''
+    localopt = '--local' if local else ''
+    cmd = 'pip freeze ' + localopt
+    if verbose:
+        print 'Run:', cmd
+    frozen = subprocess.check_output(cmd, shell=True)
+    if verbose:
+        print 'Output:'
+        print frozen
+
+    packages = []
+    for line in frozen.splitlines():
+        if has_double_equals(line):
+            packages.append(split_double_equals(line)[0])
+        else:
+            packages.append(line)
+
+    for package in packages:
+        cmd = 'pip install --upgrade ' + package
+        if dry_run:
+            print 'dry-run: ', cmd
+        else:
+            print 'Run: ', cmd
+            subprocess.call(cmd, shell=True)
+
+
+def main():
+
+    parser = argparse.ArgumentParser(description='Use pip to upgrade all installed packages.')
+    parser.add_argument('--local', action='store_true', 
+                        help='Only upgrade packages local to the current virtual environment.')
+    parser.add_argument('--dry-run', action='store_true', help='Simulate ' +
+                        'upgrading without actually doing anything')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Provide more verbose output.')
+    args = parser.parse_args()
+    upgrade(local=args.local, dry_run=args.dry_run, verbose=args.verbose)
+
+
+if __name__ == '__main__':
+    main()
+
+
