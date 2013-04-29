@@ -1,0 +1,104 @@
+#!/usr/local/bin/python3
+
+import functools
+import os
+import pickle
+import sys
+
+import bs4 # BeautifulSoup
+import requests
+
+# from ~/proj/python-utils
+import mailutil
+
+
+# Secrets to keep out of source control
+
+host = os.environ['AMAZON_SES_SMTP_HOST']
+port = os.environ['AMAZON_SES_SMTP_PORT']
+username = os.environ['AMAZON_SES_SMTP_USERNAME']
+password = os.environ['AMAZON_SES_SMTP_PASSWORD']
+user_email = os.environ['EMAIL']
+
+# Configuration
+
+# Where to save careers so we can tell if any new ones have been added next time we check.
+cache_path = os.path.expanduser('~/tmp/current_oist_careers.pickle')
+# The OIST careers page
+oist_careers_url = 'http://www.oist.jp/careers'
+# To fix the hrefs so they look good in the email message
+oist_url = 'http://www.oist.jp'
+# A function for sending a single text email via Amazon SES
+sendtextmail = mailutil.make_sendtextmail(mailutil.SMTPSSL(
+    host, port, username=username, password=password).sendone
+)
+
+
+@functools.total_ordering
+class Career(object):
+    '''
+    A sortable, hashable object representing a career.
+    Could have just used a tuple.
+    '''
+
+    def __init__(self, title, link):
+        self.title = title
+        self.link = link
+
+    def __eq__(self, other):
+        return self.title == other.title and self.link == other.link
+
+    def __lt__(self, other):
+        return (self.title, self.link) < (other.title, other.link)
+
+    def __hash__(self):
+        return hash((self.title, self.link))
+
+    def __repr__(self):
+        msg = '{}(title={title!r}, link={link!r})'
+        return msg.format(self.__class__.__name__, **vars(self))
+
+
+def load_careers():
+    if os.path.exists(cache_path):
+        with open(cache_path, 'rb') as fh:
+            return pickle.load(fh)
+    else:
+        return []
+
+
+def save_careers(careers):
+    with open(cache_path, 'wb') as fh:
+        pickle.dump(careers, fh)
+
+
+def download_oist_careers():
+    '''
+    Scrape the careers from the OIST careers page.  Yield each career.
+    '''
+    r = requests.get(oist_careers_url)
+    soup = bs4.BeautifulSoup(r.text)
+    links = soup.find_all('a')
+    career_links = [l for l in links if l.get('href').startswith('/careers/') or l.get('href').endswith('facultypositions')]
+    for link in career_links:
+        yield Career(link.get_text().strip(), oist_url + link.get('href'))
+
+
+def main():
+    '''
+    If there are any new careers, send an email listing them.
+    '''
+    prev = load_careers()
+    curr = sorted(download_oist_careers())
+    new = [c for c in curr if c not in prev]
+    if new:
+        msg = 'New Jobs at OIST:\n\n'
+        msg += ''.join('{} ({})\n'.format(c.title, c.link) for c in new)
+        sendtextmail(user_email, [user_email], 'New OIST Jobs', msg)
+        print(msg)
+
+    save_careers(curr)
+
+
+if __name__ == '__main__':
+    main()

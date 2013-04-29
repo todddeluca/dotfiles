@@ -13,20 +13,32 @@ def run(cmd):
     return subprocess.check_call(cmd, shell=True)
 
 
-def rsync(src, dest, compress=False, dry_run=False):
+def rsync(src, dest, compress=False, dry_run=False, options=None):
+    '''
+    options: a list of other options to rsync.  Useful for specifying --include
+    and --exclude options.
+    '''
+    options = options if options is not None else []
     z = '-z' if compress else ''
     dry = '--dry-run' if dry_run else ''
-    run('rsync {z} {dry} -avhP --stats {src} {dest}'.format(
-        z=z, dry=dry, src=src, dest=dest))
+    run('rsync {options} {z} {dry} -avhP --stats {src} {dest}'.format(
+        z=z, dry=dry, src=src, dest=dest, options=' '.join(options)))
 
 
-def backup_remote(dry_run=False):
+def backup_work(dry_run=False):
     '''
+    Backup work data to work server.
     '''
-    dirs = [os.path.join(HOME, 'data'), os.path.join(HOME, 'deploy'),
-            os.path.join(HOME, 'Dropbox', 'proj'),
-            os.path.join(HOME, 'Dropbox', 'work')]
     dest = 'td23@orchestra.med.harvard.edu:/groups/cbi/td23/backup/'
+
+    # only backup the work subdir of data
+    data_opts = ['--include "/data/"', '--include "/data/work/"',
+               '--include "/data/work/**"', '--exclude "*"']
+    data_dir = os.path.join(HOME, 'data')
+    rsync(data_dir, dest, compress=True, dry_run=dry_run, options=data_opts)
+
+    dirs = [os.path.join(HOME, 'deploy'),
+            os.path.join(HOME, 'work')]
     for src in dirs:
         rsync(src, dest, compress=True, dry_run=dry_run)
 
@@ -42,8 +54,8 @@ def backup_again(dry_run=False):
 
 def main():
     parser = argparse.ArgumentParser(description='Backup/Synchronize files.')
-    parser.add_argument('what', choices=['local', 'remote', 'again'], 
-                        help='Backup data remotely to orchestra, media ' +
+    parser.add_argument('what', choices=['local', 'work', 'again'], 
+                        help='Backup work data remotely to orchestra, media ' +
                         'locally to "pietown", or backup pietown pictures ' +
                         'again to chama')
     parser.add_argument('--dry-run', action='store_true', help='Simulate ' +

@@ -50,6 +50,9 @@ MAILTO=foo@example.com
 # make sure the ec2 instance is serving todddeluca.com
 0,30 * * * * curl -s -S http://www.todddeluca.com > /dev/null
 
+# check for new jobs at OIST
+0 * * * * . /Users/td23/.bash_profile && /Users/td23/bin/new_oist_careers
+
 
 ########
 # BACKUP 

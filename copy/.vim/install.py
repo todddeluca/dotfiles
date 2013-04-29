@@ -64,6 +64,7 @@ REPOS = [
     'https://github.com/mileszs/ack.vim.git',
     'https://github.com/nvie/vim-flake8.git',
     'https://github.com/scrooloose/nerdcommenter.git',
+    'https://github.com/scrooloose/syntastic.git',
     'https://github.com/sjl/gundo.vim.git',
     'https://github.com/sunaku/vim-unbundle.git',
     'https://github.com/tomtom/tlib_vim.git',
@@ -76,6 +77,7 @@ REPOS = [
     'https://github.com/tpope/vim-surround.git',
     'https://github.com/vim-scripts/TaskList.vim.git',
     'https://github.com/vim-scripts/The-NERD-tree.git',
+    'https://github.com/vim-scripts/closetag.vim.git',
 ]
 
 

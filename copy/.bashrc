@@ -121,9 +121,13 @@ if [ "$PS1" ]; then
     # spawns emacs in the shell, not in a separate window
     # --no-site-file prevents semantic caching CEDET packages from loading, packages which were slowing emacs down and creating bugs.
     alias bsi='bsub -Ip -q cbi_int_12h bash'
+    alias bsim='bsub -Is -q interactive -W 720 -R "rusage[mem=16384]" bash'
+    alias bsim32='bsub -Is -q interactive -W 720 -R "rusage[mem=32768]" bash'
+    alias bsim64='bsub -Is -q interactive -W 720 -R "rusage[mem=64000]" bash'
     # shortcuts to log into my favorite hosts
     alias ssho='ssh td23@orchestra.med.harvard.edu'
-    alias sshe='ssh -i ~/.ssh/cbi-AWS-US-East.pem ec2-user@ec2-23-21-160-23.compute-1.amazonaws.com'
+    # alias sshe='ssh -i ~/.ssh/cbi-AWS-US-East.pem ec2-user@ec2-23-21-160-23.compute-1.amazonaws.com'
+    alias sshe='ssh -i ~/.ssh/cbi-AWS-US-East.pem ubuntu@ec2-23-21-160-23.compute-1.amazonaws.com'
     alias sshg='ssh genomekey@genomekey.com'
     # remove backup and pyc files.  useful to reduce grep noise from backup files.
     alias findrm='find . -type f \( -name "*~" -or -name "*\\.pyc" \) -delete'
@@ -200,6 +204,10 @@ fi
 if [ -f "$HOME/.bash_gitconfig" ] ; then
   source "$HOME/.bash_gitconfig"
 fi
+# Email and Amazon SES credentials
+if [ -f "$HOME/.bash_email" ] ; then
+  source "$HOME/.bash_email"
+fi
 
 
 #############################
@@ -267,6 +275,8 @@ export GENEHAWK_SYSTEM_PYTHON=/usr/local/bin/python
 # commit messages.  Why does this work?
 # http://tooky.github.com/2010/04/08/there-was-a-problem-with-the-editor-vi-git-on-mac-os-x.html
 export EDITOR=/usr/bin/vim
+# Use Sublime Text
+# export EDITOR='subl -w'
 
 # Enable less to interpret raw control characters, used by ipython
 export LESS='-R'

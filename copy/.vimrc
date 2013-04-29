@@ -43,12 +43,13 @@ filetype plugin indent on     " filetype detection, plugins, and indent files.
 """ Basic settings 
 set number                    " Display line numbers
 set numberwidth=1             " using only 1 column (and 1 space) while possible
-colorscheme summerfruit256
+" colorscheme summerfruit256
 " colorscheme Tomorrow-Night " https://github.com/chriskempson/tomorrow-theme
+" colorscheme Tomorrow " https://github.com/chriskempson/tomorrow-theme
 " colorscheme desert
-" colorscheme solarized         " set a nice colorscheme. 'desert' good too.
-set background=light          " We are using dark background in vim
-" set background=dark
+colorscheme solarized         " set a nice colorscheme. 'desert' good too.
+" set background=light          " We are using dark background in vim
+set background=dark
 set title                     " show title in console title bar
 set wildmenu                  " Menu completion in command mode on <Tab>
 " <Tab> completes to the longest match and list possible completions.
@@ -82,7 +83,7 @@ set cursorline              " have a line indicate the cursor location
 set ruler                   " show the cursor position all the time
 set nostartofline           " Avoid moving cursor to BOL when jumping around
 set virtualedit=block       " Let cursor move past the last char in <C-v> mode
-set scrolloff=3             " Keep 3 context lines above and below the cursor
+set scrolloff=4             " Keep N context lines above and below the cursor
 set backspace=2             " Allow backspacing over autoindent, EOL, and BOL
 set nowrap                  " don't wrap text
 set linebreak               " don't wrap textin the middle of a word
@@ -289,9 +290,7 @@ nnoremap <leader>s5 0yy:pu<cr>v$r.o<esc>
 
 " Go to the last day in my notes file.
 " example of text marking the start of a day:
-" ==========
-" 2012-02-14
-" ==========
+" ========== 2012-02-14 ==========
 " see :help function for more on writing functions.
 " see :help normal and :help execute on how to execute normal mode commands
 " in a function.
@@ -301,10 +300,9 @@ nnoremap <leader>s5 0yy:pu<cr>v$r.o<esc>
 " http://stackoverflow.com/questions/10631881/executing-commands-in-normal-mode-inside-vim-function
 " http://vim.wikia.com/wiki/Execute_commands_without_changing_the_search_register
 function! GoToLastDay()
-  execute "normal \<Esc>G?==========\<CR>j"
+  execute "normal \<Esc>G?========== \\d\\d\\d\\d-\\d\\d-\\d\\d ==========\<CR>j"
 endfunction
 nnoremap <Leader>6 :call GoToLastDay()<CR>
-" nnoremap <Leader>6 <Esc>G?==========<CR>j
 
 
 " Go to next or previous [todo] item in my notes file.

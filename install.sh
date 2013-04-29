@@ -20,6 +20,8 @@ elif [ "$1" = "vimrc" ]; then
   # since .vimrc has no secrets, no need to rerun 'secrets'.
   rsync -av $DRYRUN "$DOTFILES/copy/.vimrc" "$HOME"
 elif [ "$1" = "vim" ]; then
+  # since .vim has no secrets, no need to rerun 'secrets'.
+  rsync -av $DRYRUN "$DOTFILES/copy/.vim" "$HOME"
   # install vim bundles
   if [[ -e "$HOME/.vim/install.py" ]] ; then
     $HOME/.vim/install.py
@@ -45,12 +47,16 @@ elif [ "$1" = "secrets" ]; then
 
   # defines EMAIL address
   source "$HOME/.bash_email"
-  echo "$EMAIL from .bash_email"
+  echo "Using $EMAIL from .bash_email to subsitute for foo@example.com in .crontab and .forward"
 
-  # insert email address into .crontab (from dotfiles repository).
+  # substitue email address into .crontab and .forward (from dotfiles repository).
   if [[ -e "$HOME/.crontab" ]] ; then
-    echo "Changing 'foo@example.com' to '$EMAIL'."
+    echo "Changing 'foo@example.com' to '$EMAIL' in .crontab."
     sed -i '' "s/MAILTO=foo@example.com/MAILTO=${EMAIL}/" "$HOME/.crontab"
+  fi
+  if [[ -e "$HOME/.forward" ]] ; then
+    echo "Changing 'foo@example.com' to '$EMAIL' in .forward."
+    sed -i '' "s/foo@example.com/${EMAIL}/" "$HOME/.forward"
   fi
 
   # unmount encrypted secrets
@@ -60,7 +66,7 @@ elif [ "$1" = "secrets" ]; then
 else
   cat <<HELP
 
-Usage: $(basename "$0") {copy,secrets,vim,bin,bashrc}
+Usage: $(basename "$0") {copy,secrets,vimrc,vim,bin,bashrc}
 
 HELP
   exit;
