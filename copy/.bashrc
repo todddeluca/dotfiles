@@ -158,6 +158,8 @@ if [ "$PS1" ]; then
     function grepsec { 
       open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && grep "$1" /Volumes/secrets/secrets.txt | less ; diskutil eject /Volumes/secrets ;
     }
+    alias opensec="open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && mvim /Volumes/secrets/secrets.txt"
+    alias closesec="diskutil eject /Volumes/secrets"
 
     # open emacs read only
     ev() {
