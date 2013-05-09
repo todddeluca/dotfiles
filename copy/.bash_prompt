@@ -133,16 +133,19 @@ fi) \e[0m\]'
 # [td23@ToddWorkMac][~]$ 
 # Example prompt when in a git repo:
 # [td23@ToddWorkMac][~/work/roundup][git:master:dirty]$ 
-export PS1='[\u@\h][\w]$(git branch &>/dev/null; \
+#
+# Note: You must enclose the $(git ...) in single quotes to get bash to run
+# the function every time.  Otherwise it just runs it once.  Compare PS1=$(date)
+# with PS1='$(date)' with PS1="$(date)".
+export PS1='\u@\h:\w''$(git branch &>/dev/null; \
 if [ $? -eq 0 ]; then \
-  echo -n "[git:$(git branch | grep ^*|sed s/\*\ //):"; \
+  BRANCH=$(git branch | grep ^*|sed s/\*\ //); \
   echo `git status` | grep "nothing to commit" > /dev/null 2>&1; \
   if [ "$?" -eq "0" ]; then \
-    echo -n "clean"; \
+    echo -n ":'$Green'($BRANCH)'$Color_Off'"; \
   else \
-    echo -n "dirty"; \
+    echo -n ":'$Red'{$BRANCH}'$Color_Off'"; \
   fi; \
-  echo -n "]" ; \
-fi)$ '
+fi)'$
 
 
