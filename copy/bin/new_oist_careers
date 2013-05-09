@@ -94,8 +94,10 @@ def main():
     if new:
         msg = 'New Jobs at OIST:\n\n'
         msg += ''.join('{} ({})\n'.format(c.title, c.link) for c in new)
-        sendtextmail(user_email, [user_email], 'New OIST Jobs', msg)
-        print(msg)
+        # sendtextmail(user_email, [user_email], 'New OIST Jobs', msg)
+        # avoid ascii encoding error
+        sys.stdout.buffer.write(msg.encode('utf-8'))
+        # print(msg)
 
     save_careers(curr)
 
