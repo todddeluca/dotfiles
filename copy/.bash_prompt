@@ -146,6 +146,18 @@ if [ $? -eq 0 ]; then \
   else \
     echo -n ":'$Red'{$BRANCH}'$Color_Off'"; \
   fi; \
-fi)'$
+fi)$ '
+
+
+# Also consider:
+# https://github.com/magicmonty/bash-git-prompt
+# Informative git prompt for bash
+# This prompt is a port of the "Informative git prompt for zsh" which you can
+# find <here>
+# A bash prompt that displays information about the current git repository. In
+# particular the branch name, difference with remote branch, number of files
+# staged, changed, etc.
+
+
 
 
