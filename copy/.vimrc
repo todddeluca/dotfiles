@@ -137,7 +137,8 @@ set list                          " Show invisible characters
 " displays tabs with :set list & displays when a line runs off-screen
 " set listchars=tab:>-,eol:$,trail:-,precedes:<,extends:>
 set listchars=""                  " Reset the listchars
-set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
+" set listchars=tab:\ \             " a tab should display as "  ", trailing whitespace as "."
+set listchars=tab:>-              " show tab as '>---'
 set listchars+=trail:.            " show trailing spaces as dots
 set listchars+=extends:>          " The character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
@@ -211,6 +212,16 @@ function! ConvertToMarkdownList()
 endfunction
 nnoremap <Leader>- :call ConvertToMarkdownList()<CR>
 vnoremap <Leader>- :call ConvertToMarkdownList()<CR>
+
+" Make a group of lines a markdown quoted block
+" todo: toggle "quote"
+" todo: handle nested quotes
+" todo: unmake a quote.
+function! ConvertToMarkdownQuote()
+  execute "normal 0i> \<esc>"
+endfunction
+nnoremap <Leader>> :call ConvertToMarkdownQuote()<CR>
+vnoremap <Leader>> :call ConvertToMarkdownQuote()<CR>
 
 " insert a blank line above or below the current line.
 nnoremap + maO<esc>`a
