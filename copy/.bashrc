@@ -7,15 +7,15 @@ if [ "$PS1" ]; then
     export HISTCONTROL=ignoredups
 
     # append to the history file, don't overwrite it
-    # shopt -s histappend
+    shopt -s histappend
 
     # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-    # HISTSIZE=10000
-    # HISTFILESIZE=20000
+    HISTSIZE=10000
+    HISTFILESIZE=20000
 
     # check the window size after each command and, if necessary,
     # update the values of LINES and COLUMNS.
-    # shopt -s checkwinsize
+    shopt -s checkwinsize
 
     # make less friendlier for non-text input files.  see lesspipe(1)
     [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -25,132 +25,27 @@ if [ "$PS1" ]; then
         debian_chroot=$(cat /etc/debian_chroot)
     fi
 
-    # set a fancy prompt (non-color, unless we know we "want" color)
-    case "$TERM" in
-        xterm-color) color_prompt=yes;;
-    esac
-
-    # uncomment for a colored prompt, if the terminal has the capability; turned
-    # off by default to not distract the user: the focus in a terminal window
-    # should be on the output of commands, not on the prompt
-    #force_color_prompt=yes
-
-    if [ -n "$force_color_prompt" ]; then
-        if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-            # We have color support; assume it's compliant with Ecma-48
-            # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-            # a case would tend to support setf rather than setaf.)
-            color_prompt=yes
-        else
-            color_prompt=
-        fi
-    fi
-
-    # set a fancy prompt
-    # PS1='\u@\h:\w\$ '
+    # Prompt definition
     source "$HOME/.bash_prompt"
-
-    # Add an "alert" alias for long running commands.  Use like so:
-    # sleep 10; alert
-    # alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
     # Alias definitions.
     # You may want to put all your additions into a separate file like
     # ~/.bash_aliases, instead of adding them here directly.
     # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-    # if [ -f ~/.bash_aliases ]; then
-    #     . ~/.bash_aliases
-    # fi
+    if [ -f ~/.bash_aliases ]; then
+        . ~/.bash_aliases
+    fi
 
     # enable programmable completion features (you don't need to enable
     # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
     # sources /etc/bash.bashrc).
-    # if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-    #     . /etc/bash_completion
-    # fi
-
-
-    # If this is an xterm set the title to user@host:dir
-    #case $TERM in
-    #xterm*)
-    #    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-    #    ;;
-    #*)
-    #    ;;
-    #esac
-
-    # enable programmable completion features (you don't need to enable
-    # this, if it's already enabled in /etc/bash.bashrc).
-    #if [ -f /etc/bash_completion ]; then
-    #  . /etc/bash_completion
-    #fi
-
-    # aliases
-    # alias ls='ls --color=auto'
-    # alias grep='grep --color=auto'
-    # alias fgrep='fgrep --color=auto'
-    # alias egrep='egrep --color=auto'
-    # alias ll='ls -alF'
-    # alias la='ls -A'
-    # alias l='ls -CF'
-    # make rm a little safer and more annoying
-    alias rm='rm -i'
-    # with color
-    alias ls='ls -GF'
-    alias ll='ls -lGF'
-    alias la='ls -laGF'
-    # without color
-    # alias ls='ls -F'
-    # alias ll='ls -lF'
-    # alias la='ls -laF'
-    # spawns emacs in the shell, not in a separate window
-    # --no-site-file prevents semantic caching CEDET packages from loading, packages which were slowing emacs down and creating bugs.
-    alias bsi='bsub -Ip -q cbi_int_12h bash'
-    alias bsim='bsub -Is -q interactive -W 720 -R "rusage[mem=16384]" bash'
-    alias bsim32='bsub -Is -q interactive -W 720 -R "rusage[mem=32768]" bash'
-    alias bsim64='bsub -Is -q interactive -W 720 -R "rusage[mem=64000]" bash'
-    # shortcuts to log into my favorite hosts
-    alias ssho='ssh td23@orchestra.med.harvard.edu'
-    # alias sshe='ssh -i ~/.ssh/cbi-AWS-US-East.pem ec2-user@ec2-23-21-160-23.compute-1.amazonaws.com'
-    alias sshe='ssh -i ~/.ssh/cbi-AWS-US-East.pem ubuntu@ec2-23-21-160-23.compute-1.amazonaws.com'
-    alias sshg='ssh genomekey@genomekey.com'
-    # remove backup and pyc files.  useful to reduce grep noise from backup files.
-    alias findrm='find . -type f \( -name "*~" -or -name "*\\.pyc" \) -delete'
-    alias findls='find . -type f \( -name "*~" -or -name "*\\.pyc" \)'
-    # add group read and write perms (and execute perms to dirs and user executable files)
-    # warning: avoid changing perms of $HOME or $HOME/.ssh to avoid making sshd angry!
-    # alias findgrp='find . -user $USER \( -type d -exec chmod g+rwx {} \; -or -type f \( -perm -u+x -exec chmod g+rwx {} \; -or -exec chmod g+rw {} \; \) \)'
-
-    # easily open notes.txt
-    alias mvimn='mvim ~/Dropbox/notes/notes.txt'
-
-    alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
-    alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
-    alias emacsn='emacs ~/Dropbox/notes/notes.txt'
-    alias emacskd='ec -e "(kill-emacs)"'
-    # alias emacs='open -a /Applications/Emacs.app'
-
-    # convert dos or mac line endings to unix line endings, in place!
-    # named after the real utility, dos2unix, which is not on my mac.
-    alias mac2unix="perl -pi -e 's/\r\n?/\n/g'"
-
-    # Remove the history numbers from the beginning of history lines.  Useful for cutting and pasting history.
-    alias historyn="history | python -c 'import sys; [sys.stdout.write(l.lstrip().split(\"  \", 1)[1]) for l in sys.stdin]'"
-    # alternative awk implementation
-    # alias historyn='history | awk '\''{$1="";$0=substr($0,2)}1'\'''
-
-    # mount, grep, and unmount secrets
-    function grepsec { 
-      open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && grep "$1" /Volumes/secrets/secrets.txt | less ; diskutil eject /Volumes/secrets ;
-    }
-    alias opensec="open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && mvim /Volumes/secrets/secrets.txt"
-    alias closesec="diskutil eject /Volumes/secrets"
-
-    # open emacs read only
-    ev() {
-      emacs "$1" --eval '(setq buffer-read-only t)'
-    }
+    if ! shopt -oq posix; then
+      if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+      elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+      fi
+    fi
 
     ###################
     # SSH CONFIGURATION
@@ -206,10 +101,6 @@ fi
 # The first thing appended has precedence of latter things appended.
 
 # PREPEND
-# Executables for python3 are sometimes installed here, e.g. pip3.
-PATH="/usr/local/share/python3:$PATH"
-# Where pip installer puts pip, based on hombrew python install.
-PATH="/usr/local/share/python:$PATH"
 # Setting PATH for local installs, like python3
 PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 # Setting PATH for my bin
@@ -224,13 +115,9 @@ PATH="$PATH:/usr/local/mysql/bin"
 PATH="$PATH:/usr/local/ncbi/blast/bin"
 # octave programming environment
 PATH="$PATH:/Applications/Octave.app/Contents/Resources/bin"
-# rvm
-# PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-# rbenv
-PATH="$PATH:$HOME/.rbenv/bin"
 # Homebrew Ruby Gem binaries default install location
 # see 'brew info ruby'
-PATH="$PATH:/usr/local/Cellar/ruby/1.9.3-p362/bin"
+PATH="$PATH:/usr/local/opt/ruby/bin"
 
 # Setting PATH for Python 2.7
 # PATH="/System/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
@@ -243,12 +130,17 @@ export PATH="/Developer/NVIDIA/CUDA-5.0/bin:$PATH"
 # makes various things complain, like `brew doctor` and `diskutil`.
 # export DYLD_LIBRARY_PATH="/Developer/NVIDIA/CUDA-5.0/lib:${DYLD_LIBRARY_PATH}"
 
+# STARDOG RDF/Semantic Web Triple-store
+export PATH=$PATH:~/data/installs/stardog-1.2.2
 export PATH
+export STARDOG_HOME=~/data/stardog
+
 
 # Configure the system-wide python GeneHawk uses for creating a virtualenv on
 # localhost.
 export GENEHAWK_SYSTEM_PYTHON=/usr/local/bin/python
 
+export ROUNDUP_DEPLOY_USER=td23
 
 # something to make mac os x and MySQLdb play nicely.
 # http://stackoverflow.com/questions/4559699/python-mysqldb-and-library-not-loaded-libmysqlclient-16-dylibq
@@ -273,10 +165,15 @@ export LESS='-R'
 # 1.8 is the ruby version in /usr/bin in Mac OS X 10.6 snow leopard 
 # export RUBYOPT="rubygems"
 
+# RBENV
+# PATH="$PATH:$HOME/.rbenv/bin"
+# Homebrew suggested this RBENV_ROOT
+RBENV_ROOT=/usr/local/var/rbenv
+
 # initialize rbenv
-if which rbenv > /dev/null ; then 
-  eval "$(rbenv init -)"; 
-fi
+# if which rbenv > /dev/null ; then 
+#   eval "$(rbenv init -)"; 
+# fi
 
 
 
