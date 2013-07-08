@@ -37,4 +37,9 @@ to the dotfiles repository.
 - https://github.com/mathiasbynens/dotfiles
 - https://github.com/cowboy/dotfiles/blob/master/bin/dotfiles
 - http://dotfiles.github.com/
+- https://github.com/jigish/dotfiles contains an example of how to source an
+  OS-specific dotfile.  
 
+        CURRDIR=$(pwd)
+        SCRIPTDIR=$(cd `dirname $0` && pwd)
+        $SCRIPTDIR/config.$(uname).sh $1

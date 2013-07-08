@@ -45,11 +45,12 @@ set number                    " Display line numbers
 set numberwidth=1             " using only 1 column (and 1 space) while possible
 " colorscheme summerfruit256
 " colorscheme Tomorrow-Night " https://github.com/chriskempson/tomorrow-theme
-" colorscheme Tomorrow " https://github.com/chriskempson/tomorrow-theme
+colorscheme Tomorrow " https://github.com/chriskempson/tomorrow-theme
 " colorscheme desert
-colorscheme solarized         " set a nice colorscheme. 'desert' good too.
-" set background=light          " We are using dark background in vim
-set background=dark
+" colorscheme solarized         " set a nice colorscheme. 'desert' is good too.
+set background=light          " We are using dark background in vim
+" set background=dark
+set guifont=Monaco:h13        " Set the default font and size
 set title                     " show title in console title bar
 set wildmenu                  " Menu completion in command mode on <Tab>
 " <Tab> completes to the longest match and list possible completions.
@@ -242,12 +243,13 @@ nnoremap <leader><space> :nohlsearch<cr>
 " sudo write this file.
 cmap w!! w !sudo tee % >/dev/null
 
-" make it easier to edit and source .vimrc.after (Janus)
+" Make it easier to edit and source .vimrc
+" I edit the .vimrc in my dotfiles repository and copy it to my
+" home directory when sourcing it.
 " Edit vimrc
-nnoremap <leader>ev :vsplit ~/.vimrc<cr>
-" nnoremap <leader>sv :source ~/.vimrc<cr>
+nnoremap <leader>ev :vsplit ~/proj/dotfiles/copy/.vimrc<cr>
 " Reload Vimrc
-map <silent> <leader>sv :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+map <silent> <leader>sv :silent !cp ~/proj/dotfiles/copy/.vimrc ~/.vimrc<CR>:source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " make Y work like D, C, etc.
 nnoremap Y y$
