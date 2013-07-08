@@ -32,13 +32,15 @@ def backup_work(dry_run=False):
     dest = 'td23@orchestra.med.harvard.edu:/groups/cbi/td23/backup/'
 
     # only backup the work subdir of data
-    data_opts = ['--include "/data/"', '--include "/data/work/"',
-               '--include "/data/work/**"', '--exclude "*"']
+    data_opts = ['--include "/data/"', 
+                 '--include "/data/work/"', '--include "/data/work/**"',
+                 '--include "/data/stardog/"', '--include "/data/stardog/**"',
+                 '--exclude "*"']
     data_dir = os.path.join(HOME, 'data')
     rsync(data_dir, dest, compress=True, dry_run=dry_run, options=data_opts)
 
     dirs = [os.path.join(HOME, 'deploy'),
-            os.path.join(HOME, 'work')]
+            os.path.join(HOME, 'Dropbox', 'work')]
     for src in dirs:
         rsync(src, dest, compress=True, dry_run=dry_run)
 
