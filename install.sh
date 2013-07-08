@@ -52,7 +52,7 @@ elif [ "$1" = "secrets" ]; then
   # substitue email address into .crontab and .forward (from dotfiles repository).
   if [[ -e "$HOME/.crontab" ]] ; then
     echo "Changing 'foo@example.com' to '$EMAIL' in .crontab."
-    sed -i '' "s/MAILTO=foo@example.com/MAILTO=${EMAIL}/" "$HOME/.crontab"
+    sed -i '' "s/MAILTO=foo@example.com/MAILTO=$EMAIL/" "$HOME/.crontab"
   fi
   if [[ -e "$HOME/.forward" ]] ; then
     echo "Changing 'foo@example.com' to '$EMAIL' in .forward."
