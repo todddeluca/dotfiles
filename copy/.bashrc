@@ -118,6 +118,8 @@ PATH="$PATH:/Applications/Octave.app/Contents/Resources/bin"
 # Homebrew Ruby Gem binaries default install location
 # see 'brew info ruby'
 PATH="$PATH:/usr/local/opt/ruby/bin"
+# Node.js from Homebrew
+PATH="$PATH:/usr/local/share/npm/bin"
 
 # Setting PATH for Python 2.7
 # PATH="/System/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
@@ -141,6 +143,7 @@ export STARDOG_HOME=~/data/stardog
 export GENEHAWK_SYSTEM_PYTHON=/usr/local/bin/python
 
 export ROUNDUP_DEPLOY_USER=td23
+export ORCHESTRA_USER=td23
 
 # something to make mac os x and MySQLdb play nicely.
 # http://stackoverflow.com/questions/4559699/python-mysqldb-and-library-not-loaded-libmysqlclient-16-dylibq
