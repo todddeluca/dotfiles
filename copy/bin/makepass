@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+
+import argparse
+import random
+import math
+import sys
+import re
+
+
+ALPHANUM = u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+DEFAULT_DICT_FILE = '/usr/share/dict/words'
+
+def read_dictionary(dictionary):
+    return list(set([line.strip() for line in open(dictionary)]))
+
+def password_strength(tokens, length):
+    '''
+    tokens: a list of unique tokens used to randomly construct a password.
+    length: the number of random tokens in a password
+    '''
+    bits_per_token = math.log(len(tokens), 2)
+    print('bits_per_password =', bits_per_token * length)
+
+
+def print_password(tokens, length, sep=u''):
+    password = sep.join([random.choice(tokens) for i in range(length)])
+    print(password)
+
+
+def phrase_password(length, dictionary=DEFAULT_DICT_FILE):
+    '''
+    The "correct horse battery staple" function.
+
+    The following uses the dictionary /usr/share/dict/words and skips all the words
+    containing characters like é, å, ø and all those ending in 's. The resulting
+    word list has 72,940 words in it. Then it chooses 4 random words from this
+    dictionary and prints them to the screen. This gives a password with about 65
+    bits of entropy.  By adding another word, thus creating a 5-word passphrase, a
+    botnet capable of checking 1,000 trillion passwords per second would spend, on
+    average, 1600 years cracking away before it would find the correct passphrase.
+
+    cat /usr/share/dict/words|egrep -v "é|'s$|[Åå]|[Øø]"|shuf --random-source=/dev/random -n4
+
+    This generates words that are all lowercase and relatively short.  A list of ~34900 words.
+
+    LC_ALL=C egrep '^[[:lower:]]{4,8}$' /usr/share/dict/words | shuf --random-source=/dev/random -n4 | fmt
+
+    A python version to generate groups of random words
+    '''
+    # Get lowercase words from the dictionary.
+    tokens = [word for word in read_dictionary(dictionary) if re.search("^[a-z]{4,8}$", word)]
+    print(tokens)
+    password_strength(tokens, length)
+    print_password(tokens, length, sep=u' ')
+
+
+def char_password(length, chars=ALPHANUM):
+    '''
+    Generate passwords of random letters (uppercase and lowercase) and digits.
+    '''
+    tokens = list(chars)
+    password_strength(tokens, length)
+    print_password(tokens, length)
+
+
+def chunk_password(length, chunk_size=3, dictionary=DEFAULT_DICT_FILE):
+    '''
+    Random strings of wordlike characters. Specifically, generate a set of word
+    chunks of length `chunk_size`.  Then randomly choose `length` of them to
+    join into a password.  The idea is that this function produces more
+    pronoucible passwords than a randomized character-based password.
+    '''
+    # Get lowercase words from the dictionary.
+    tokens = [word for word in read_dictionary(dictionary) if re.search("^[a-z]+$", word)]
+    # Get word prefixes of the right size from the tokens.
+    tokens = list(set(word[:chunk_size] for word in tokens if len(word) >=
+                      chunk_size))
+    password_strength(tokens, length)
+    print_password(tokens, length)
+
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(
+                                       description='The kind of password to generate.')
+
+    subparser = subparsers.add_parser('char', 
+                                      help='A word made from random characters')
+    subparser.add_argument('-l', '--length', type=int, default=30)
+    subparser.add_argument('--chars', default=ALPHANUM)
+    subparser.set_defaults(func=char_password)
+
+    subparser = subparsers.add_parser('chunk',
+                                      help='A word made from random chunks of words.')
+    subparser.add_argument('-l', '--length', type=int, default=3)
+    subparser.add_argument('--chunk-size', type=int, default=3)
+    subparser.add_argument('--dictionary', default=DEFAULT_DICT_FILE,
+                           help='File of words')
+    subparser.set_defaults(func=chunk_password)
+
+    subparser = subparsers.add_parser('phrase',
+                                      help='A phrase made from random words.')
+    subparser.add_argument('-l', '--length', type=int, default=4)
+    subparser.add_argument('--dictionary', default=DEFAULT_DICT_FILE,
+                           help='File of words')
+    subparser.set_defaults(func=phrase_password)
+
+    # parse command line args and pass them as keyword args to func.
+    args = parser.parse_args()
+    kws = dict(vars(args))
+    if not kws:
+        parser.print_help()
+    else:
+        del kws['func']
+        args.func(**kws)
+
+
+if __name__ == '__main__':
+    main()
+
