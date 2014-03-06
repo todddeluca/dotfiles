@@ -178,5 +178,12 @@ RBENV_ROOT=/usr/local/var/rbenv
 #   eval "$(rbenv init -)"; 
 # fi
 
+# Apache Maven
+export M2_HOME=/usr/local/apache-maven/apache-maven-3.2.1
+export M2=$M2_HOME/bin
+export PATH=$M2:$PATH
+# http://stackoverflow.com/questions/6588390/where-is-java-home-on-osx-lion-10-7-mountain-lion-10-8-or-mavericks-10-9
+export JAVA_HOME="$(/usr/libexec/java_home)"
+export PATH="$PATH:$JAVA_HOME/bin"
 
 
