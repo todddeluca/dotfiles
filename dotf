@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+
+
+'''
+Files and dirs with secrets, stored in an encrypted place:
+
+.bash_aws_lpm
+.bash_aws_tfd
+.bash_email
+.bash_gitconfig
+.bash_sysmed
+.config/
+.my.cnf
+.pgpass
+.pypirc
+.ssh/
+
+Files (and things) needing secrets:
+
+.crontab
+.forward
+'''
+
+import json
+import os
+import sys
+import argparse
+import subprocess
+
+
+
+# Directory containing this script
+HERE = os.path.abspath(os.path.dirname(__file__))
+DOTFILES = HERE
+HOME = os.path.expanduser('~')
+DRYRUN = []
+
+
+def source(filename):
+    subprocess.check_call('source ' + filename, shell=True)
+
+
+def rsync_to_home(src):
+    subprocess.check_call(['rsync', '-av'] + DRYRUN + [src, HOME])
+
+
+def rsync_from_copy_to_home(name):
+    '''
+    @param name the basename of a file or directory in the dotfiles copy dir.
+    '''
+    rsync_to_home(os.path.join(DOTFILES, 'copy', name))
+
+
+def bashrc():
+    rsync_from_copy_to_home('.bashrc')
+    print('You probably want to run:')
+    print('source ' + os.path.join(HOME, '.bashrc'))
+
+
+def bin():
+    rsync_from_copy_to_home('bin')
+
+
+def copy():
+    rsync_to_home(DOTFILES + '/copy/')
+
+
+def secrets():
+  # mount encrypted secrets
+  subprocess.check_call(['open', HOME + '/Dropbox/secrets.dmg'])
+  input('Waiting for secrets.dmg to mount. Press a return to continue. ')
+
+  # install secrets
+
+  # copy dotfiles
+  rsync_to_home('/Volumes/secrets/dotfiles/copy/')
+
+  # add github credentials
+  if os.path.isfile(HOME + '/.bash_gitconfig'):
+    print('Adding secrets to git config.')
+    source(HOME + '/.bash_gitconfig')
+
+  # defines EMAIL address
+
+  email = json.load(open('/Volumes/secrets/dotfiles/email.json'))['email']
+  print('Using ' + email + ' from .bash_email to subsitute for ' +
+        'foo@example.com in .crontab and .forward')
+
+  # substitue email address into .crontab and .forward (from dotfiles repository).
+  if os.path.exists(HOME + '/.crontab'):
+    print("Changing 'foo@example.com' to '" + email + "' in .crontab.")
+    subprocess.check_call(
+        ['sed', '-i', '', "s/MAILTO=foo@example.com/MAILTO=" + email + "/",
+         HOME + "/.crontab"])
+
+  if os.path.exists(HOME + '/.forward'):
+    print("Changing 'foo@example.com' to '" + email + "' in .forward.")
+    subprocess.check_call(
+        ['sed', '-i', '', "s/foo@example.com/" + email + "/",
+         HOME + "/.forward"])
+
+  # Unmount encrypted secrets
+  # Eject fails if current working directory is /Volumes/secrets, 
+  # or something else is using /Volumes/secrets.
+  # lsof shows what is using the volume.  Useful info if the eject fails.
+  subprocess.check_call('lsof | grep secrets', shell=True)
+  subprocess.check_call(['diskutil', 'eject', '/Volumes/secrets'], cwd=HOME)
+
+
+
+def vim():
+    rsync_from_copy_to_home('.vim')
+    vim_installer = os.path.join(HOME, '.vim', 'install.py')
+    if os.path.exists(vim_installer):
+        subprocess.check_call(vim_installer)
+
+
+def vimrc():
+    rsync_from_copy_to_home('.vimrc')
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest='action')
+    # Configure echo subparser
+    subparser = subparsers.add_parser('bashrc')
+    subparser = subparsers.add_parser('bin')
+    subparser = subparsers.add_parser('copy')
+    subparser = subparsers.add_parser('secrets')
+    subparser = subparsers.add_parser('vim')
+    subparser = subparsers.add_parser('vimrc')
+    # invoke a function whose name corresponds to action and 
+    # whose parameter names correspond with the cli arguments.
+    args = parser.parse_args()
+    if args.action is None:
+        parser.print_help()
+    else:
+        kws = dict(vars(args))
+        del kws['action']
+        return globals()[args.action](**kws)
+
+
+
+if __name__ == '__main__':
+    main()
+
