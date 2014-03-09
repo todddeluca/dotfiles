@@ -65,6 +65,22 @@ def copy():
     rsync_to_home(DOTFILES + '/copy/')
 
 
+def link():
+    link_home_dir = os.path.join(DOTFILES, 'link_home')
+    for name in os.listdir(link_home_dir):
+        src = os.path.join(link_home_dir, name)
+        dest = os.path.join(HOME, name)
+        if os.path.islink(dest):
+            print('Removing existing link: ' + dest)
+            os.remove(dest)
+
+        if not os.path.exists(dest):
+            print('Linking {} to {}'.format(src, dest))
+            subprocess.check_call(['ln', '-s', src, dest])
+        else:
+            print(dest + ' already exists and is not a link.  Skipping')
+
+
 def secrets():
   # mount encrypted secrets
   subprocess.check_call(['open', HOME + '/Dropbox/secrets.dmg'])
@@ -126,6 +142,7 @@ def main():
     subparser = subparsers.add_parser('bashrc')
     subparser = subparsers.add_parser('bin')
     subparser = subparsers.add_parser('copy')
+    subparser = subparsers.add_parser('link')
     subparser = subparsers.add_parser('secrets')
     subparser = subparsers.add_parser('vim')
     subparser = subparsers.add_parser('vimrc')

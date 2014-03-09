@@ -103,8 +103,8 @@ fi
 # PREPEND
 # Setting PATH for local installs, like python3
 PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-# Setting PATH for my bin
-PATH="~/bin:$PATH"
+# Setting PATH for my bin dirs
+PATH="$HOME/bin:$HOME/Dropbox/proj/dotfiles:$HOME/Dropbox/proj/dotfiles/bin:$PATH"
 
 # APPEND
 # amazon ec2 tools
