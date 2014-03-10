@@ -51,12 +51,6 @@ def rsync_from_copy_to_home(name):
     rsync_to_home(os.path.join(DOTFILES, 'copy', name))
 
 
-def bashrc():
-    rsync_from_copy_to_home('.bashrc')
-    print('You probably want to run:')
-    print('source ' + os.path.join(HOME, '.bashrc'))
-
-
 def bin():
     rsync_from_copy_to_home('bin')
 
@@ -66,9 +60,9 @@ def copy():
 
 
 def link():
-    link_home_dir = os.path.join(DOTFILES, 'link_home')
-    for name in os.listdir(link_home_dir):
-        src = os.path.join(link_home_dir, name)
+    link_dir = os.path.join(DOTFILES, 'link')
+    for name in os.listdir(link_dir):
+        src = os.path.join(link_dir, name)
         dest = os.path.join(HOME, name)
         if os.path.islink(dest):
             print('Removing existing link: ' + dest)
@@ -79,6 +73,9 @@ def link():
             subprocess.check_call(['ln', '-s', src, dest])
         else:
             print(dest + ' already exists and is not a link.  Skipping.')
+
+    print('You might want to run:')
+    print('source ' + os.path.join(HOME, '.bashrc'))
 
 
 def secrets():
@@ -112,21 +109,15 @@ def vim():
         subprocess.check_call(vim_installer)
 
 
-def vimrc():
-    rsync_from_copy_to_home('.vimrc')
-
-
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest='action')
     # Configure echo subparser
-    subparser = subparsers.add_parser('bashrc')
     subparser = subparsers.add_parser('bin')
     subparser = subparsers.add_parser('copy')
     subparser = subparsers.add_parser('link')
     subparser = subparsers.add_parser('secrets')
     subparser = subparsers.add_parser('vim')
-    subparser = subparsers.add_parser('vimrc')
     # invoke a function whose name corresponds to action and
     # whose parameter names correspond with the cli arguments.
     args = parser.parse_args()
