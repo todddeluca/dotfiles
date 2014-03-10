@@ -78,49 +78,30 @@ def link():
             print('Linking {} to {}'.format(src, dest))
             subprocess.check_call(['ln', '-s', src, dest])
         else:
-            print(dest + ' already exists and is not a link.  Skipping')
+            print(dest + ' already exists and is not a link.  Skipping.')
 
 
 def secrets():
-  # mount encrypted secrets
-  subprocess.check_call(['open', HOME + '/Dropbox/secrets.dmg'])
-  input('Waiting for secrets.dmg to mount. Press a return to continue. ')
+    # mount encrypted secrets
+    subprocess.check_call(['open', HOME + '/Dropbox/secrets.dmg'])
+    input('Waiting for secrets.dmg to mount. Press a return to continue. ')
 
-  # install secrets
+    # install secrets
 
-  # copy dotfiles
-  rsync_to_home('/Volumes/secrets/dotfiles/copy/')
+    # copy dotfiles
+    rsync_to_home('/Volumes/secrets/dotfiles/copy/')
 
-  # add github credentials
-  if os.path.isfile(HOME + '/.bash_gitconfig'):
-    print('Adding secrets to git config.')
-    source(HOME + '/.bash_gitconfig')
+    # add github credentials
+    if os.path.isfile(HOME + '/.bash_gitconfig'):
+        print('Adding secrets to git config.')
+        source(HOME + '/.bash_gitconfig')
 
-  # defines EMAIL address
-
-  email = json.load(open('/Volumes/secrets/dotfiles/email.json'))['email']
-  print('Using ' + email + ' from .bash_email to subsitute for ' +
-        'foo@example.com in .crontab and .forward')
-
-  # substitue email address into .crontab and .forward (from dotfiles repository).
-  if os.path.exists(HOME + '/.crontab'):
-    print("Changing 'foo@example.com' to '" + email + "' in .crontab.")
-    subprocess.check_call(
-        ['sed', '-i', '', "s/MAILTO=foo@example.com/MAILTO=" + email + "/",
-         HOME + "/.crontab"])
-
-  if os.path.exists(HOME + '/.forward'):
-    print("Changing 'foo@example.com' to '" + email + "' in .forward.")
-    subprocess.check_call(
-        ['sed', '-i', '', "s/foo@example.com/" + email + "/",
-         HOME + "/.forward"])
-
-  # Unmount encrypted secrets
-  # Eject fails if current working directory is /Volumes/secrets, 
-  # or something else is using /Volumes/secrets.
-  # lsof shows what is using the volume.  Useful info if the eject fails.
-  subprocess.check_call('lsof | grep secrets', shell=True)
-  subprocess.check_call(['diskutil', 'eject', '/Volumes/secrets'], cwd=HOME)
+    # Unmount encrypted secrets
+    # Eject fails if current working directory is /Volumes/secrets,
+    # or something else is using /Volumes/secrets.
+    # lsof shows what is using the volume.  Useful info if the eject fails.
+    subprocess.check_call('lsof | grep secrets', shell=True)
+    subprocess.check_call(['diskutil', 'eject', '/Volumes/secrets'], cwd=HOME)
 
 
 
@@ -146,7 +127,7 @@ def main():
     subparser = subparsers.add_parser('secrets')
     subparser = subparsers.add_parser('vim')
     subparser = subparsers.add_parser('vimrc')
-    # invoke a function whose name corresponds to action and 
+    # invoke a function whose name corresponds to action and
     # whose parameter names correspond with the cli arguments.
     args = parser.parse_args()
     if args.action is None:
@@ -160,4 +141,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
