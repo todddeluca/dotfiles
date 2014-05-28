@@ -244,12 +244,10 @@ nnoremap <leader><space> :nohlsearch<cr>
 cmap w!! w !sudo tee % >/dev/null
 
 " Make it easier to edit and source .vimrc
-" I edit the .vimrc in my dotfiles repository and copy it to my
-" home directory when sourcing it.
 " Edit vimrc
-nnoremap <leader>ev :vsplit ~/proj/dotfiles/copy/.vimrc<cr>
+nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 " Reload Vimrc
-map <silent> <leader>sv :silent !cp ~/proj/dotfiles/copy/.vimrc ~/.vimrc<CR>:source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+map <silent> <leader>sv :silent :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " make Y work like D, C, etc.
 nnoremap Y y$
