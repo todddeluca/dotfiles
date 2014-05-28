@@ -189,3 +189,5 @@ export PATH="$PATH:$JAVA_HOME/bin"
 # Haskell Platform
 export PATH=~/.cabal/bin:$PATH
 
+# Julia Language
+export PATH="$PATH:/Applications/Julia-0.2.1.app/Contents/Resources/julia/bin"
