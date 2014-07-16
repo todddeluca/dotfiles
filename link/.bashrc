@@ -24,18 +24,6 @@ if [ "$PS1" ]; then
     if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
         debian_chroot=$(cat /etc/debian_chroot)
     fi
-
-    # Prompt definition
-    source "$HOME/.bash_prompt"
-
-    # Alias definitions.
-    # You may want to put all your additions into a separate file like
-    # ~/.bash_aliases, instead of adding them here directly.
-    # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-    if [ -f ~/.bash_aliases ]; then
-        . ~/.bash_aliases
-    fi
-
     # enable programmable completion features (you don't need to enable
     # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
     # sources /etc/bash.bashrc).
@@ -50,7 +38,9 @@ if [ "$PS1" ]; then
     ###################
     # SSH CONFIGURATION
     # add creds for sshing to ec2 instances.
-    ssh-add ~/.ssh/cbi-AWS-US-East.pem 2>/dev/null
+    if [ -f ~/.ssh/cbi-AWS-US-East.pem ]; then
+      ssh-add ~/.ssh/cbi-AWS-US-East.pem 2>/dev/null
+    fi
 
 fi
 
@@ -73,32 +63,70 @@ export EC2_HOME=/Applications/ec2-api-tools-1.3-57419
 export EC2_AMITOOL_HOME=/Applications/ec2-ami-tools-1.3-56066
 
 
-####################
-# Secret Credentials
-# Env vars used by boto, aws cli, etc.
-if [ -f "$HOME/.bash_aws_tfd" ] ; then
-  source "$HOME/.bash_aws_tfd"
-fi
-# Env vars used by SysMed
-if [ -f "$HOME/.bash_sysmed" ] ; then
-  source "$HOME/.bash_sysmed"
-fi
-# Git and Github credentials
-if [ -f "$HOME/.bash_gitconfig" ] ; then
-  source "$HOME/.bash_gitconfig"
-fi
-# Email and Amazon SES credentials
-if [ -f "$HOME/.bash_email" ] ; then
-  source "$HOME/.bash_email"
-fi
+############################
+# Source configuration files
+
+for f in ~/.bash.d/.bash_*; do
+  source $f;
+done
+
+# Source secrets
+for f in ~/.bash_secrets.d/.bash_*; do
+  source $f;
+done
 
 
-#################################
-# Dealer.com (DDC) specific stuff
-if [ -f "$HOME/.bash_ddc" ] ; then
-  source "$HOME/.bash_ddc"
+
+# If running interactively, then:
+if [ "$PS1" ]; then
+
+    # Prompt definition
+    if [ -f ~/.bash.d/.bash_prompt ]; then
+      source ~/.bash.d/.bash_prompt
+    fi
+
+    # Alias definitions.
+    # You may want to put all your additions into a separate file like
+    # ~/.bash_aliases, instead of adding them here directly.
+    # See /usr/share/doc/bash-doc/examples in the bash-doc package.
+    if [ -f ~/.bash.d/.bash_aliases ]; then
+        . ~/.bash.d/.bash_aliases
+    fi
+
 fi
 
+# ####################
+# # Secret Credentials
+# # Env vars used by boto, aws cli, etc.
+# if [ -f "$HOME/.bash_aws_tfd" ] ; then
+#   source "$HOME/.bash_aws_tfd"
+# fi
+# # Env vars used by SysMed
+# if [ -f "$HOME/.bash_sysmed" ] ; then
+#   source "$HOME/.bash_sysmed"
+# fi
+# # Git and Github credentials
+# if [ -f "$HOME/.bash_gitconfig" ] ; then
+#   source "$HOME/.bash_gitconfig"
+# fi
+# # Email and Amazon SES credentials
+# if [ -f "$HOME/.bash_email" ] ; then
+#   source "$HOME/.bash_email"
+# fi
+
+
+# #################################
+# # Dealer.com (DDC) specific stuff
+# if [ -f "$HOME/.bash_ddc" ] ; then
+#   source "$HOME/.bash_ddc"
+# fi
+
+#############################
+# GIT
+
+# Configure the location of .gitignore dynamically.
+# This aids in using the same .bashrc with different home directories.
+git config --global core.excludesfile '~/.gitignore'
 
 
 #############################

@@ -1,0 +1,9 @@
+# This directory is meant contain secrets that should NOT be checked in to
+# source control.
+# Examples of types of secrets: email addresses, passwords
+
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
+
