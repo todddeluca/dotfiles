@@ -93,6 +93,14 @@ if [ -f "$HOME/.bash_email" ] ; then
 fi
 
 
+#################################
+# Dealer.com (DDC) specific stuff
+if [ -f "$HOME/.bash_ddc" ] ; then
+  source "$HOME/.bash_ddc"
+fi
+
+
+
 #############################
 # PATH
 # Consodidate PATH changes in one section
