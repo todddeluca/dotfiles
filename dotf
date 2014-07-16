@@ -36,8 +36,14 @@ HOME = os.path.expanduser('~')
 DRYRUN = []
 
 
-def source(filename):
-    subprocess.check_call('source ' + filename, shell=True)
+def source_bashrc_prompt():
+
+    print('You might want to run:')
+    print('source ' + os.path.join(HOME, '.bashrc'))
+
+
+# def source(filename):
+    # subprocess.check_call('source ' + filename, shell=True)
 
 
 def rsync_to_home(src):
@@ -74,8 +80,7 @@ def link():
         else:
             print(dest + ' already exists and is not a link.  Skipping.')
 
-    print('You might want to run:')
-    print('source ' + os.path.join(HOME, '.bashrc'))
+    source_bashrc_prompt()
 
 
 def secrets():
@@ -88,18 +93,16 @@ def secrets():
     # copy dotfiles
     rsync_to_home('/Volumes/secrets/dotfiles/copy/')
 
-    # add github credentials
-    if os.path.isfile(HOME + '/.bash_gitconfig'):
-        print('Adding secrets to git config.')
-        source(HOME + '/.bash_gitconfig')
-
     # Unmount encrypted secrets
     # Eject fails if current working directory is /Volumes/secrets,
     # or something else is using /Volumes/secrets.
     # lsof shows what is using the volume.  Useful info if the eject fails.
+    print('If ejecting /Volumes/secrets fails, one of the volumes files might still be open.')
+    print('The following listing might show which file/dir.')
     subprocess.check_call('lsof | grep secrets', shell=True)
     subprocess.check_call(['diskutil', 'eject', '/Volumes/secrets'], cwd=HOME)
 
+    source_bashrc_prompt()
 
 
 def vim():
