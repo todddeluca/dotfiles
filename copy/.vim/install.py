@@ -42,8 +42,13 @@ import sys
 
 
 # directory containing bundles/modules loaded by Pathogen
-BUNDLE_DIR = os.path.expanduser('~/.vim/bundle')
-REPOS_DIR = os.path.expanduser('~/.vim/repos')
+DOTVIM_DIR = os.path.expanduser('~/.vim')
+BUNDLE_DIR = os.path.join(DOTVIM_DIR, 'bundle')
+REPOS_DIR = os.path.join(DOTVIM_DIR, 'repos')
+# directories to create under the .vim dir if they are missing
+INIT_DIRS = [BUNDLE_DIR, REPOS_DIR] + [os.path.join(DOTVIM_DIR, d) for d in
+                                       ['autoload', 'colors', 'indent',
+                                        'snippets']]
 
 TOMORROW_REPO = 'https://github.com/chriskempson/tomorrow-theme.git'
 REPOS = [
@@ -173,6 +178,12 @@ def main():
         # install all repos
         def repo_flag(repo):
             return True
+
+    # create initial directory structure, if needed
+    for d in INIT_DIRS:
+        if not os.path.exists(d):
+            print('Making directory {}'.format(d))
+            os.mkdir(d)
 
     # install all normal repos matching any repo flags.
     for r in REPOS:
