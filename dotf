@@ -52,7 +52,7 @@ def rsync_from_copy_to_home(name):
 
 
 def bin():
-    rsync_from_copy_to_home('bin')
+    rsync_to_home(os.path.join(DOTFILES, 'bin'))
 
 
 def copy():
