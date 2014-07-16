@@ -66,34 +66,17 @@ export EC2_AMITOOL_HOME=/Applications/ec2-ami-tools-1.3-56066
 ############################
 # Source configuration files
 
+# Includes .bash_prompt, .bash_aliases
 for f in ~/.bash.d/.bash_*; do
   source $f;
 done
 
-# Source secrets
+# Includes .bash_aws_tfd, .bash_aws_sysmed, .bash_gitconfig, .bash_email, .bash_ddc_secrets
 for f in ~/.bash_secrets.d/.bash_*; do
   source $f;
 done
 
 
-
-# If running interactively, then:
-if [ "$PS1" ]; then
-
-    # Prompt definition
-    if [ -f ~/.bash.d/.bash_prompt ]; then
-      source ~/.bash.d/.bash_prompt
-    fi
-
-    # Alias definitions.
-    # You may want to put all your additions into a separate file like
-    # ~/.bash_aliases, instead of adding them here directly.
-    # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-    if [ -f ~/.bash.d/.bash_aliases ]; then
-        . ~/.bash.d/.bash_aliases
-    fi
-
-fi
 
 # ####################
 # # Secret Credentials
@@ -126,7 +109,7 @@ fi
 
 # Configure the location of .gitignore dynamically.
 # This aids in using the same .bashrc with different home directories.
-git config --global core.excludesfile '~/.gitignore'
+git config --global core.excludesfile "$HOME/.gitignore"
 
 
 #############################
