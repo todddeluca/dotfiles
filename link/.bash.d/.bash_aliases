@@ -39,6 +39,9 @@ if [ "$PS1" ]; then
           ;;
   esac
 
+  # Source .bashrc shortcut
+  alias sb="source $HOME/.bashrc"
+
   # Maybe should test for dircolors first
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'

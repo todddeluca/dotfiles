@@ -171,6 +171,30 @@ if [ "$PS1" ]; then
   fi) \e[0m\]'
 
 
+  # From DDC, https://docs.dealer.com/pages/viewpage.action?pageId=98640924
+  # There are env vars for including information in the bash prompt,
+  # although they can increase the amount of time to render the prompt with
+  # some repositories.
+
+  # export GIT_PS1_SHOWDIRTYSTATE='1'     # Display unstaged (*) and staged(+) changes
+  # export GIT_PS1_SHOWSTASHSTATE='1'     # Display stashed changes ($)
+  # export GIT_PS1_SHOWUNTRACKEDFILES='1' # Display untracked files (%)
+  # export GIT_PS1_SHOWUPSTREAM='auto'
+
+  # Lame example prompt showing how to use __git_ps1
+  # PS1='\h:\W`__git_ps1`\$ '                                       # put the git info from PS1 in the prompt
+
+  # Indicator 	Meaning
+  # * 	unstaged changes exist
+  # + 	staged changes exist
+  # $ 	stashed changes exist
+  # % 	untracked changes exist
+  # = 	local repo is even relative to the origin
+  # > 	local repo is ahead of the origin
+  # < 	local repo is behind the origin
+  # <> 	local repo has diverged from the origin
+
+
   # Todd DeLuca.  Simple prompt with user, host, pwd, and possibly git branch and dirty status.
   # For similar prompts, see:
   # http://allancraig.net/index.php?option=com_content&view=article&id=108:ps1-export-command-for-git&catid=45:general&Itemid=96

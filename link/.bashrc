@@ -44,6 +44,24 @@ if [ "$PS1" ]; then
 
 fi
 
+# If running interactively, then:
+if [ "$PS1" ]; then
+
+  # Source git prompt and bash completion
+  # From the homebrew location
+  if [ -f /usr/local/etc/bash_completion.d/git-prompt.sh ]; then
+    source /usr/local/etc/bash_completion.d/git-prompt.sh
+  fi
+
+  if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+    source /usr/local/etc/bash_completion.d/git-completion.bash
+  fi
+
+  # Git prompt and completion setup
+  PS1='\h:\W`__git_ps1`\$ '                                       # put the git info from PS1 in the prompt
+  export GIT_PS1_SHOWDIRTYSTATE="1"                               # Display unstaged (*) and staged(+) changes
+fi
+
 
 ###########################
 # Make umask group-friendly.  
@@ -77,32 +95,35 @@ for f in ~/.bash_secrets.d/.bash_*; do
 done
 
 
+#####
+# DDC
 
-# ####################
-# # Secret Credentials
-# # Env vars used by boto, aws cli, etc.
-# if [ -f "$HOME/.bash_aws_tfd" ] ; then
-#   source "$HOME/.bash_aws_tfd"
-# fi
-# # Env vars used by SysMed
-# if [ -f "$HOME/.bash_sysmed" ] ; then
-#   source "$HOME/.bash_sysmed"
-# fi
-# # Git and Github credentials
-# if [ -f "$HOME/.bash_gitconfig" ] ; then
-#   source "$HOME/.bash_gitconfig"
-# fi
-# # Email and Amazon SES credentials
-# if [ -f "$HOME/.bash_email" ] ; then
-#   source "$HOME/.bash_email"
-# fi
+# Adding build module to the path (first)
+export PATH=$HOME/git/build/bin:$PATH
+
+#########
+# Vertica
+
+PATH="$PATH:/usr/local/opt/vertica/bin"
 
 
-# #################################
-# # Dealer.com (DDC) specific stuff
-# if [ -f "$HOME/.bash_ddc" ] ; then
-#   source "$HOME/.bash_ddc"
-# fi
+########
+# Grails
+# Homebrew location
+# export GRAILS_HOME=/usr/local/Cellar/grails/2.0.3/libexec
+# Location preferred by DDC build scripts, using the download from the grails website.
+export GRAILS_HOME=/opt/grails-2.0.3
+export PATH="$PATH:$GRAILS_HOME/bin"
+
+########
+# Groovy
+export GROOVY_HOME=/usr/local/opt/groovy/libexec
+
+
+#######
+# SCALA
+export SCALA_HOME=/usr/local/opt/scala210/idea
+PATH="$PATH:$SCALA_HOME/bin"
 
 #############################
 # GIT
@@ -187,6 +208,7 @@ export LESS='-R'
 # 1.8 is the ruby version in /usr/bin in Mac OS X 10.6 snow leopard 
 # export RUBYOPT="rubygems"
 
+#######
 # RBENV
 # PATH="$PATH:$HOME/.rbenv/bin"
 # Homebrew suggested this RBENV_ROOT
@@ -197,16 +219,38 @@ RBENV_ROOT=/usr/local/var/rbenv
 #   eval "$(rbenv init -)"; 
 # fi
 
+##############
 # Apache Maven
-export M2_HOME=/usr/local/apache-maven/apache-maven-3.2.1
-export M2=$M2_HOME/bin
-export PATH=$M2:$PATH
+# export M2_HOME=/usr/local/Cellar/maven/3.2.2
+# export M2=$M2_HOME/bin
+# export PATH=$M2:$PATH
+export MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=768m"
+
+
+########
+# Gradle
+# Used by gradle?
+# export GRADLE_HOME=/usr/local/Cellar/gradle/2.0/libexec
+
+
+######
+# JAVA
 # http://stackoverflow.com/questions/6588390/where-is-java-home-on-osx-lion-10-7-mountain-lion-10-8-or-mavericks-10-9
-export JAVA_HOME="$(/usr/libexec/java_home)"
+export JAVA_HOME="$(/usr/libexec/java_home -v 1.7)"
 export PATH="$PATH:$JAVA_HOME/bin"
 
-# Haskell Platform
+# Quick switching between java 1.6 and 1.7
+# export JAVA_HOME_1_6="$(/usr/libexec/java_home -v 1.6)"
+# export JAVA_HOME_1_7="$(/usr/libexec/java_home -v 1.7)"
+# alias j16="export JAVA_HOME=$JAVA_HOME_1_6"
+# alias j17="export JAVA_HOME=$JAVA_HOME_1_7"
+
+#########
+# Haskell
 export PATH=~/.cabal/bin:$PATH
 
+################
 # Julia Language
 export PATH="$PATH:/Applications/Julia-0.2.1.app/Contents/Resources/julia/bin"
+
+
