@@ -51,7 +51,7 @@
 0,30 * * * * curl -s -S http://www.todddeluca.com > /dev/null
 
 # check for new jobs at OIST
-0 * * * * . /Users/tfd/.bash_profile && new_oist_careers
+# 0 * * * * . /Users/tfd/.bash_profile && new_oist_careers
 
 
 ########
