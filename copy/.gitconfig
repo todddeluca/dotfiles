@@ -1,5 +1,5 @@
 [core]
-	excludesfile = /Users/td23/.gitignore
+  excludesfile = /Users/td23/.gitignore
 
 [alias] 
   st = status
@@ -19,5 +19,10 @@
   branch = auto
   ui = true
   pager = true
+
 [push]
- 	default = simple
+  default = simple
+
+[merge]
+        tool = opendiff
+
