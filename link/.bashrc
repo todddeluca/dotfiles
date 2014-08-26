@@ -107,6 +107,8 @@ export PATH=$HOME/git/build/bin:$PATH
 PATH="$PATH:/usr/local/opt/vertica/bin"
 
 
+
+
 ########
 # Grails
 # Homebrew location
@@ -224,7 +226,11 @@ RBENV_ROOT=/usr/local/var/rbenv
 # export M2_HOME=/usr/local/Cellar/maven/3.2.2
 # export M2=$M2_HOME/bin
 # export PATH=$M2:$PATH
-export MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=768m"
+MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=768m"
+# Add spring-instrument to run DDC adw-services Spring webapp locally
+# export MAVEN_OPTS="$MAVEN_OPTS -javaagent:$HOME/.m2/repository/org/springframework/spring-instrument/3.0.2.RELEASE/spring-instrument-3.0.2.RELEASE.jar -Dorg.mortbay.xml.XmlParser.NotValidating=true"
+export DDC_BUILD_PATH=$HOME/git/build
+export MAVEN_OPTS="$MAVEN_OPTS -javaagent:$DDC_BUILD_PATH/lib/spring-instrument-3.1.0.RELEASE.jar -Dorg.mortbay.xml.XmlParser.NotValidating=true"
 
 
 ########

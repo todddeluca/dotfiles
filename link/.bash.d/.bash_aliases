@@ -110,4 +110,8 @@ if [ "$PS1" ]; then
   alias ssv7='sudo service virtuoso-opensource-7.0'
   alias ssv6='sudo service virtuoso-opensource-6.1'
 
+  # DDC
+  # Open my DDC notes in MacVim
+  alias mvimd='mvim $HOME/ddc-notes/ddc-notes.txt'
+
 fi

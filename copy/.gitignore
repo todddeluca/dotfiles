@@ -59,4 +59,8 @@
 # Icon?
 # Thumbs.db
 
-
+#############################
+# IDE metadata files and dirs
+# IntelliJ
+.idea/
+.iml
