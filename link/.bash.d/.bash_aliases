@@ -114,4 +114,8 @@ if [ "$PS1" ]; then
   # Open my DDC notes in MacVim
   alias mvimd='mvim $HOME/ddc-notes/ddc-notes.txt'
 
+  # Prune local branches that have been merged on the remote
+  # source: Will Briggs
+  alias prunelocal='git branch -r | awk '\''{print $1}'\'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '\''{print $1}'\'' | xargs git branch -d'
+
 fi
