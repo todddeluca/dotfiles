@@ -96,6 +96,13 @@ if [ "$PS1" ]; then
   alias secopen="open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && mvim /Volumes/secrets/secrets.txt"
   alias seceject="diskutil eject /Volumes/secrets"
 
+  # grep for something in all pom files within and below the current dir
+  # used for DDC and maven
+  function greppom {
+    grep "$1" `findpom`
+  }
+  alias findpom='find . -name pom.xml'
+
   # open emacs read only
   ev() {
     emacs "$1" --eval '(setq buffer-read-only t)'
@@ -116,6 +123,7 @@ if [ "$PS1" ]; then
 
   # Prune local branches that have been merged on the remote
   # source: Will Briggs
+  # source: http://stackoverflow.com/questions/13064613/git-how-to-prune-local-tracking-branches-that-do-not-exist-on-remote-anymore
   alias prunelocal='git branch -r | awk '\''{print $1}'\'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '\''{print $1}'\'' | xargs git branch -d'
 
 fi

@@ -314,7 +314,8 @@ function! GoToLastDay()
   execute "normal \<Esc>G?========== \\d\\d\\d\\d-\\d\\d-\\d\\d ==========\<CR>j"
 endfunction
 nnoremap <Leader>6 :call GoToLastDay()<CR>
-
+" Go to next / previous day.
+nnoremap <silent> <leader>td /========== \d\d\d\d-\d\d-\d\d ==========<CR>
 
 " Go to next or previous [todo] item in my notes file.
 " nnoremap <Leader>t <Esc>/\[todo\]<CR>
