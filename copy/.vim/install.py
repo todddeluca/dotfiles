@@ -56,10 +56,10 @@ REPOS = [
     # 'https://github.com/plasticboy/vim-markdown.git',
     # 'https://github.com/sontek/rope-vim.git',
     # 'https://github.com/vim-scripts/AutoComplPop.git',
+    # 'https://github.com/fholgado/minibufexpl.vim.git', # replaced by vim-airline b/c of occassional annoying behavior that screws up my windows
     'https://github.com/MarcWeber/vim-addon-mw-utils.git',
     'https://github.com/alfredodeza/pytest.vim.git',
     'https://github.com/altercation/vim-colors-solarized.git',
-    'https://github.com/fholgado/minibufexpl.vim.git',
     'https://github.com/fs111/pydoc.vim.git',
     'https://github.com/garbas/vim-snipmate.git',
     'https://github.com/honza/vim-snippets.git',
@@ -83,6 +83,8 @@ REPOS = [
     'https://github.com/vim-scripts/TaskList.vim.git',
     'https://github.com/vim-scripts/The-NERD-tree.git',
     'https://github.com/vim-scripts/closetag.vim.git',
+    'https://github.com/bling/vim-airline.git',
+    'https://github.com/bling/vim-bufferline.git',
 ]
 
 

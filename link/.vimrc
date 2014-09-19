@@ -78,6 +78,7 @@ let maplocalleader = "\\"
 """ Plugin Configuration
 let g:NERDSpaceDelims = 1 " Add a space after the comment character.
 
+let g:airline#extensions#bufferline#enabled = 1
 
 """ Moving Around/Editing
 set cursorline              " have a line indicate the cursor location
