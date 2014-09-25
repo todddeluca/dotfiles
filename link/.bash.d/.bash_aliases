@@ -119,7 +119,7 @@ if [ "$PS1" ]; then
 
   # DDC
   # Open my DDC notes in MacVim
-  alias mvimd='mvim $HOME/ddc-notes/ddc-notes.txt'
+  alias mvimd='mvim $HOME/Dropbox/ddc/notes/ddc-notes.txt'
 
   # Prune local branches that have been merged on the remote
   # source: Will Briggs
