@@ -51,7 +51,7 @@ def same_file(path1, path2):
 
 def is_datetime_on_basename(path):
     try:
-        time.strptime(os.path.basename(path)[:15], "%Y%m%d_%H%M%S") # '20120513_142759' 24-hour time
+        time.strptime(os.path.basename(path)[:16], "%Y%m%d_%H%M%S_") # '20120513_142759_' 24-hour time
         return True
     except Exception:
        return False
@@ -64,9 +64,22 @@ def prepend_datetime_to_basename(path):
     '''
     # get the new filenames which start with the file modification time.
     mtime = os.stat(path).st_mtime
-    mtimeString = time.strftime("%Y%m%d_%H%M%S", time.localtime(mtime)) # e.g. '20120527_145336'
-    return os.path.join(os.path.dirname(path), mtimeString + '_' + os.path.basename(path))
-    
+    mtime_prefix = time.strftime("%Y%m%d_%H%M%S_", time.localtime(mtime)) # e.g. '20120527_145336'
+    return os.path.join(os.path.dirname(path), mtime_prefix + os.path.basename(path))
+
+
+def remove_datetime_prefix_from_basename(path):
+    '''
+    If the filename starts with a datetime prefix like 'yyyymmdd_hhmmss_',
+    return a path with the the prefix removed.
+    For example, if path is '/Volumes/NO NAME 1/DCIM/100MSDCF/20140831_105512_DSC00855.JPG'
+    then '/Volumes/NO NAME 1/DCIM/100MSDCF/DSC00855.JPG' is returned.
+    '''
+    if is_datetime_on_basename(path):
+        return os.path.join(os.path.dirname(path), os.path.basename(path)[16:])
+    else:
+        return path
+
 
 def add_missing_datetime(path):
     if not is_datetime_on_basename(path):
@@ -137,15 +150,24 @@ def dir_pattern_paths(dirname, regex):
             regex.search(fn)]
 
 
+def dir_remove_datetimes(dirname, regex=PIC_OR_MOVIE_RE):
+    '''
+    '''
+    paths = dir_pattern_paths(dirname, regex)
+    spaths = [p for p in paths if os.path.isfile(p) and is_datetime_on_basename(p)]
+    dpaths = [remove_datetime_prefix_from_basename(p) for p in spaths]
+    path_pairs = list(zip(spaths, dpaths))
+    pprint.pprint(path_pairs)
+    rename_remove_or_fail_paths(zip(spaths, dpaths))
+
+
 def dir_add_datetimes(dirname, regex=PIC_OR_MOVIE_RE):
     '''
     Add a datetime stamp to the filenames of files in `dirname` if they 
     do not have one already.
     '''
     paths = dir_pattern_paths(dirname, regex)
-    print('Found {} matching paths')
-    spaths = [p for p in paths if os.path.isfile(p) and not
-              is_datetime_on_basename(p)]
+    spaths = [p for p in paths if os.path.isfile(p) and not is_datetime_on_basename(p)]
     dpaths = [add_missing_datetime(f) for f in spaths]
     path_pairs = list(zip(spaths, dpaths))
     pprint.pprint(path_pairs)
@@ -215,6 +237,10 @@ def main():
 
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest='action')
+
+    p = subparsers.add_parser('remove_datestamp', help='Remove any existing datestamp prefix from files in a directory')
+    p.add_argument('dirname')
+    p.set_defaults(func=dir_remove_datetimes)
 
     p = subparsers.add_parser('datestamp', help='Add a datestamp to filenames missing one in a directory.')
     p.add_argument('dirname')
