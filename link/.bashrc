@@ -126,6 +126,8 @@ export GROOVY_HOME=/usr/local/opt/groovy/libexec
 # SCALA
 export SCALA_HOME=/usr/local/opt/scala210/idea
 PATH="$PATH:$SCALA_HOME/bin"
+export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
+
 
 #############################
 # GIT
@@ -226,11 +228,18 @@ RBENV_ROOT=/usr/local/var/rbenv
 # export M2_HOME=/usr/local/Cellar/maven/3.2.2
 # export M2=$M2_HOME/bin
 # export PATH=$M2:$PATH
-MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=768m"
+MAVEN_OPTS="-Xmx2048m -XX:MaxPermSize=768m -XX:ReservedCodeCacheSize=512m"
+# Recommended for building Spark: export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
 # Add spring-instrument to run DDC adw-services Spring webapp locally
 # export MAVEN_OPTS="$MAVEN_OPTS -javaagent:$HOME/.m2/repository/org/springframework/spring-instrument/3.0.2.RELEASE/spring-instrument-3.0.2.RELEASE.jar -Dorg.mortbay.xml.XmlParser.NotValidating=true"
 export DDC_BUILD_PATH=$HOME/git/build
 export MAVEN_OPTS="$MAVEN_OPTS -javaagent:$DDC_BUILD_PATH/lib/spring-instrument-3.1.0.RELEASE.jar -Dorg.mortbay.xml.XmlParser.NotValidating=true"
+
+#######
+# SPARK
+# This can fix a problem on mac os x, where running spark locally multiple times fails.
+# https://groups.google.com/forum/#!msg/spark-users/XnDQgR1zTI0/mTozhw1PCvsJ
+export SPARK_LOCAL_IP=127.0.0.1
 
 
 ########
@@ -243,6 +252,7 @@ export MAVEN_OPTS="$MAVEN_OPTS -javaagent:$DDC_BUILD_PATH/lib/spring-instrument-
 # JAVA
 # http://stackoverflow.com/questions/6588390/where-is-java-home-on-osx-lion-10-7-mountain-lion-10-8-or-mavericks-10-9
 export JAVA_HOME="$(/usr/libexec/java_home -v 1.7)"
+# export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
 export PATH="$PATH:$JAVA_HOME/bin"
 
 # Quick switching between java 1.6 and 1.7
