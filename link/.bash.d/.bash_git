@@ -3,6 +3,7 @@
 
 git config --global core.excludesfile ~/.gitignore
 
+git config --global alias.lp 'log -p'
 
 # Initialize DDC git flow
 
@@ -13,5 +14,4 @@ git config --global gitflow.prefix.release "release/"
 git config --global gitflow.prefix.hotfix "hotfix/" 
 git config --global gitflow.prefix.support "support/" 
 git config --global gitflow.prefix.versiontag ""
-
 
