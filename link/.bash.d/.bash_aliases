@@ -125,5 +125,7 @@ if [ "$PS1" ]; then
   # source: Will Briggs
   # source: http://stackoverflow.com/questions/13064613/git-how-to-prune-local-tracking-branches-that-do-not-exist-on-remote-anymore
   alias prunelocal='git branch -r | awk '\''{print $1}'\'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '\''{print $1}'\'' | xargs git branch -d'
+  # Prune remote branches that have been deleted on origin and then prune local branches that do not have a corresponding remote branch
+  alias pruneddcgit='git remote prune origin && prunelocal'
 
 fi
