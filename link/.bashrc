@@ -117,6 +117,7 @@ PATH="$PATH:/usr/local/opt/vertica/bin"
 export GRAILS_HOME=/opt/grails-2.0.3
 export PATH="$PATH:$GRAILS_HOME/bin"
 
+
 ########
 # Groovy
 export GROOVY_HOME=/usr/local/opt/groovy/libexec
@@ -128,6 +129,13 @@ export SCALA_HOME=/usr/local/opt/scala210/idea
 PATH="$PATH:$SCALA_HOME/bin"
 export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=256M"
 
+
+#########
+# GO LANG
+
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 
 #############################
 # GIT
