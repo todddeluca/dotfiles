@@ -75,12 +75,6 @@ umask 002
 export GROUP=staff
 
 
-#########################
-# Set up amazon ec2 tools
-export EC2_HOME=/Applications/ec2-api-tools-1.3-57419
-export EC2_AMITOOL_HOME=/Applications/ec2-ami-tools-1.3-56066
-
-
 ############################
 # Source configuration files
 
@@ -93,6 +87,24 @@ done
 for f in ~/.bash_secrets.d/.bash_*; do
   source $f;
 done
+
+
+
+########################
+# DOCKER and Boot2Docker
+
+# Output of boot2docker init; boot2docker start; $(boot2docker shellinit)
+export DOCKER_HOST=tcp://192.168.59.103:2376
+export DOCKER_CERT_PATH=/Users/tfd/.boot2docker/certs/boot2docker-vm
+export DOCKER_TLS_VERIFY=1
+
+
+
+#########################
+# Set up amazon ec2 tools
+export EC2_HOME=/Applications/ec2-api-tools-1.3-57419
+export EC2_AMITOOL_HOME=/Applications/ec2-ami-tools-1.3-56066
+
 
 
 #####

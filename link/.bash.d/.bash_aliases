@@ -41,6 +41,7 @@ if [ "$PS1" ]; then
 
   # Source .bashrc shortcut
   alias sb="source $HOME/.bashrc"
+  alias eb="$EDITOR $HOME/.bashrc"
 
   # Maybe should test for dircolors first
   alias grep='grep --color=auto'
