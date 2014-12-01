@@ -59,8 +59,6 @@ if [ "$PS1" ]; then
   # shortcuts to log into my favorite hosts
   # Orchestra!
   alias ssho='ssh td23@orchestra.med.harvard.edu'
-  # Home Webserver on EC2
-  alias sshe='ssh -i ~/.ssh/cbi-AWS-US-East.pem ubuntu@ec2-23-21-160-23.compute-1.amazonaws.com'
   # Erik Gafni's GenomeKey server.
   alias sshg='ssh genomekey@genomekey.com'
   # Semantic Database server on EC2

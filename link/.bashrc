@@ -221,7 +221,8 @@ export ORCHESTRA_USER=td23
 # use /usr/bin/vim instead of vim to fix non-zero exit code when using vim to edit git 
 # commit messages.  Why does this work?
 # http://tooky.github.com/2010/04/08/there-was-a-problem-with-the-editor-vi-git-on-mac-os-x.html
-export EDITOR=/usr/bin/vim
+# export EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/env vim
 # Use Sublime Text
 # export EDITOR='subl -w'
 
