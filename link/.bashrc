@@ -118,7 +118,9 @@ export PATH=$HOME/git/build/bin:$PATH
 
 PATH="$PATH:/usr/local/opt/vertica/bin"
 
-
+###################
+# DDC Remote Config
+export REMOTE_CONFIG_HOST="vtfwk-zookeeper-vip.dealer.ddc"
 
 
 ########
