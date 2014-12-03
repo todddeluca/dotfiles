@@ -39,10 +39,6 @@ if [ "$PS1" ]; then
           ;;
   esac
 
-  # Source .bashrc shortcut
-  alias sb="source $HOME/.bashrc"
-  alias eb="$EDITOR $HOME/.bashrc"
-
   # Maybe should test for dircolors first
   alias grep='grep --color=auto'
   alias fgrep='fgrep --color=auto'
@@ -70,8 +66,15 @@ if [ "$PS1" ]; then
   # warning: avoid changing perms of $HOME or $HOME/.ssh to avoid making sshd angry!
   # alias findgrp='find . -user $USER \( -type d -exec chmod g+rwx {} \; -or -type f \( -perm -u+x -exec chmod g+rwx {} \; -or -exec chmod g+rw {} \; \) \)'
 
-  # easily open notes.txt
+  # Source .bashrc shortcut
+  alias sb="source $HOME/.bashrc"
+  # Edit common things
+  alias eb="mvim $HOME/.bashrc"
+  alias eba="mvim $HOME/.bash.d/.bash_aliases"
   alias mvimn='mvim ~/Dropbox/notes/notes.txt'
+  alias mvimd='mvim $HOME/Dropbox/ddc/notes/ddc-notes.txt'
+  alias mvimt='mvim $HOME/proj/technotes'
+  alias edsd='mvim $HOME/Dropbox/ddc/notes/software_development/README.md'
 
   alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
   alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
@@ -117,9 +120,6 @@ if [ "$PS1" ]; then
   alias ssv6='sudo service virtuoso-opensource-6.1'
 
   # DDC
-  # Open my DDC notes in MacVim
-  alias mvimd='mvim $HOME/Dropbox/ddc/notes/ddc-notes.txt'
-
   # Prune local branches that have been merged on the remote
   # source: Will Briggs
   # source: http://stackoverflow.com/questions/13064613/git-how-to-prune-local-tracking-branches-that-do-not-exist-on-remote-anymore
