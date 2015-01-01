@@ -69,11 +69,11 @@ if [ "$PS1" ]; then
   # Source .bashrc shortcut
   alias sb="source $HOME/.bashrc"
   # Edit common things
-  alias eb="mvim $HOME/.bashrc"
-  alias eba="mvim $HOME/.bash.d/.bash_aliases"
-  alias mvimn='mvim ~/Dropbox/notes/notes.txt'
-  alias mvimd='mvim $HOME/Dropbox/ddc/notes/ddc-notes.txt'
-  alias mvimt='mvim $HOME/proj/technotes'
+  alias edb="mvim $HOME/.bashrc"
+  alias edba="mvim $HOME/.bash.d/.bash_aliases"
+  alias edn='mvim ~/Dropbox/notes/notes.txt'
+  alias eddn='mvim $HOME/Dropbox/work/ddc/notes/ddc-notes.txt'
+  alias edtn='mvim $HOME/proj/technotes'
   alias edsd='mvim $HOME/Dropbox/ddc/notes/software_development/README.md'
 
   alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
