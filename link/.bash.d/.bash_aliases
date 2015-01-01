@@ -74,7 +74,7 @@ if [ "$PS1" ]; then
   alias edn='mvim ~/Dropbox/notes/notes.txt'
   alias eddn='mvim $HOME/Dropbox/work/ddc/notes/ddc-notes.txt'
   alias edtn='mvim $HOME/proj/technotes'
-  alias edsd='mvim $HOME/Dropbox/ddc/notes/software_development/README.md'
+  alias edsd='mvim $HOME/Dropbox/work/ddc/notes/software_development/README.md'
 
   alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
   alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
