@@ -105,12 +105,15 @@ if [ "$PS1" ]; then
   }
   alias findpom='find . -name pom.xml'
 
-  # find files, excluding .git/ dir, everything except generated-sources in target/ dir, jar files, etc.
-  alias findcode="find . -type d \( -name .git -o -name .idea -o -name '*.iml' -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -print"
-  alias findcode0="find . -type d \( -name .git -o -name .idea -o -name '*.iml' -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -print0"
+  # Functions and aliases for Finding "code" files and Searching within them.
   function grepcode0 {
     findcode0 | xargs -0 grep "$@"
   }
+  # Find "code" files, excluding .git/ dir, everything except generated-sources in target/ dir, jar files, etc.
+  function findcode0 {
+    find . -type d \( -name .git -o -name .idea -o -name '*.iml' -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -print0
+  }
+  alias findcode="find . -type d \( -name .git -o -name .idea -o -name '*.iml' -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -print"
 
   # open emacs read only
   ev() {
