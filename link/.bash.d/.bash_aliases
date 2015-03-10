@@ -106,7 +106,7 @@ if [ "$PS1" ]; then
   alias findpom='find . -name pom.xml'
 
   # Functions and aliases for Finding "code" files and Searching within them.
-  function grepcode0 {
+  function grepcode {
     findcode0 | xargs -0 grep "$@"
   }
   # Find "code" files, excluding .git/ dir, everything except generated-sources in target/ dir, jar files, etc.
