@@ -111,9 +111,9 @@ if [ "$PS1" ]; then
   }
   # Find "code" files, excluding .git/ dir, everything except generated-sources in target/ dir, jar files, etc.
   function findcode0 {
-    find . -type d \( -name .git -o -name .idea -o -name '*.iml' -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -print0
+    find . -type d \( -name .git -o -name .idea -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -not -name '*.iml' -print0
   }
-  alias findcode="find . -type d \( -name .git -o -name .idea -o -name '*.iml' -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -print"
+  alias findcode="find . -type d \( -name .git -o -name .idea -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -not -name '*.iml' -print"
 
   # open emacs read only
   ev() {
