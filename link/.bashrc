@@ -293,3 +293,7 @@ export PATH=~/.cabal/bin:$PATH
 export PATH="$PATH:/Applications/Julia-0.2.1.app/Contents/Resources/julia/bin"
 
 
+
+# Add Raptor (RDF parsing library) to PATH
+export PATH="/usr/local/raptor/bin:$PATH"
+
