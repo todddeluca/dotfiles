@@ -264,6 +264,9 @@ export MAVEN_OPTS="$MAVEN_OPTS -javaagent:$DDC_BUILD_PATH/lib/spring-instrument-
 # https://groups.google.com/forum/#!msg/spark-users/XnDQgR1zTI0/mTozhw1PCvsJ
 export SPARK_LOCAL_IP=127.0.0.1
 
+# Add Spark to Path
+export PATH="$PATH:/usr/local/spark-1.3.1-bin-hadoop2.6/bin"
+
 
 ########
 # Gradle
@@ -291,8 +294,6 @@ export PATH=~/.cabal/bin:$PATH
 ################
 # Julia Language
 export PATH="$PATH:/Applications/Julia-0.2.1.app/Contents/Resources/julia/bin"
-
-
 
 # Add Raptor (RDF parsing library) to PATH
 export PATH="/usr/local/raptor/bin:$PATH"
