@@ -7,11 +7,17 @@ git config --global alias.lp 'log -p'
 
 # Initialize DDC git flow
 
-git config --global gitflow.branch.master master 
-git config --global gitflow.branch.develop develop 
+git config --global gitflow.branch.master master
+git config --global gitflow.branch.develop develop
 git config --global gitflow.prefix.feature "feature/"
-git config --global gitflow.prefix.release "release/" 
-git config --global gitflow.prefix.hotfix "hotfix/" 
-git config --global gitflow.prefix.support "support/" 
+git config --global gitflow.prefix.release "release/"
+git config --global gitflow.prefix.hotfix "hotfix/"
+git config --global gitflow.prefix.support "support/"
 git config --global gitflow.prefix.versiontag ""
 
+# Choose an editor for git commits
+# https://help.github.com/articles/associating-text-editors-with-git/
+git config --global core.editor "vim"
+# git config --global core.editor "atom --wait"
+# git config --global core.editor "subl -n -w"
+# git config --global core.editor "mate -w"

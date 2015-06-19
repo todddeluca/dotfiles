@@ -14,7 +14,7 @@ if [ "$PS1" ]; then
   # Create handy ls aliases
   # Detect OS, since color support and ls syntax vary by platform
   # http://stackoverflow.com/questions/394230/detect-the-os-from-a-bash-script
-  case "$(uname)" in 
+  case "$(uname)" in
       Darwin)
           # with color
           alias ls='ls -GF'
@@ -69,12 +69,12 @@ if [ "$PS1" ]; then
   # Source .bashrc shortcut
   alias sb="source $HOME/.bashrc"
   # Edit common things
-  alias edb="mvim $HOME/.bashrc"
-  alias edba="mvim $HOME/.bash.d/.bash_aliases"
-  alias edn='mvim ~/Dropbox/notes/notes.txt'
-  alias eddn='mvim $HOME/Dropbox/work/ddc/notes/ddc-notes.txt'
-  alias edtn='mvim $HOME/proj/technotes'
-  alias edsd='mvim $HOME/Dropbox/work/ddc/notes/software_development.md'
+  alias edb="$VISUAL $HOME/.bashrc"
+  alias edba="$VISUAL $HOME/.bash.d/.bash_aliases"
+  alias edn='$VISUAL ~/Dropbox/notes/notes.txt'
+  alias eddn='$VISUAL $HOME/Dropbox/work/ddc/notes/ddc-notes.txt'
+  alias edtn='$VISUAL $HOME/proj/technotes'
+  alias edsd='$VISUAL $HOME/Dropbox/work/ddc/notes/software_development.md'
 
   alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
   alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
@@ -92,10 +92,10 @@ if [ "$PS1" ]; then
   # alias historyn='history | awk '\''{$1="";$0=substr($0,2)}1'\'''
 
   # aliases and functions to mount, grep, and unmount secrets
-  function secgrep { 
+  function secgrep {
     open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && grep "$1" /Volumes/secrets/secrets.txt | less ; diskutil eject /Volumes/secrets ;
   }
-  alias secopen="open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && mvim /Volumes/secrets/secrets.txt"
+  alias secopen="open ~/Dropbox/secrets.dmg && read -p 'Press a key to continue' -n 1 && $VISUAL /Volumes/secrets/secrets.txt"
   alias seceject="diskutil eject /Volumes/secrets"
 
   # grep for something in all pom files within and below the current dir

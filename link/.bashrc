@@ -64,8 +64,8 @@ fi
 
 
 ###########################
-# Make umask group-friendly.  
-# Since my default group is td23 and private to me anyway, this does not compromise 
+# Make umask group-friendly.
+# Since my default group is td23 and private to me anyway, this does not compromise
 # security, but it allows collaboration with cbi more easily.
 # And plays nicely with the setgid bit (see chmod)
 umask 002
@@ -220,19 +220,22 @@ export ORCHESTRA_USER=td23
 # Use MacVim to edit git commit messages, etc.
 # export VISUAL="mvim -f"
 
-# use /usr/bin/vim instead of vim to fix non-zero exit code when using vim to edit git 
+# use /usr/bin/vim instead of vim to fix non-zero exit code when using vim to edit git
 # commit messages.  Why does this work?
 # http://tooky.github.com/2010/04/08/there-was-a-problem-with-the-editor-vi-git-on-mac-os-x.html
 # export EDITOR="/usr/local/bin/vim"
+# Fancy GUI editor
+export VISUAL=atom
+# barebones terminal editor
 export EDITOR=vim
 # Use Sublime Text
-# export EDITOR='subl -w'
+# export EDITOR='subl -n -w'
 
 # Enable less to interpret raw control characters, used by ipython
 export LESS='-R'
 
 # Configure ruby 1.8 to use ruby gems.
-# 1.8 is the ruby version in /usr/bin in Mac OS X 10.6 snow leopard 
+# 1.8 is the ruby version in /usr/bin in Mac OS X 10.6 snow leopard
 # export RUBYOPT="rubygems"
 
 #######
@@ -242,8 +245,8 @@ export LESS='-R'
 RBENV_ROOT=/usr/local/var/rbenv
 
 # initialize rbenv
-# if which rbenv > /dev/null ; then 
-#   eval "$(rbenv init -)"; 
+# if which rbenv > /dev/null ; then
+#   eval "$(rbenv init -)";
 # fi
 
 ##############
@@ -263,15 +266,6 @@ export MAVEN_OPTS="$MAVEN_OPTS -javaagent:$DDC_BUILD_PATH/lib/spring-instrument-
 # This can fix a problem on mac os x, where running spark locally multiple times fails.
 # https://groups.google.com/forum/#!msg/spark-users/XnDQgR1zTI0/mTozhw1PCvsJ
 export SPARK_LOCAL_IP=127.0.0.1
-
-# Add Spark to Path
-export PATH="$PATH:/usr/local/spark-1.3.1-bin-hadoop2.6/bin"
-
-
-########
-# Gradle
-# Used by gradle?
-# export GRADLE_HOME=/usr/local/Cellar/gradle/2.0/libexec
 
 
 ######
@@ -297,4 +291,3 @@ export PATH="$PATH:/Applications/Julia-0.2.1.app/Contents/Resources/julia/bin"
 
 # Add Raptor (RDF parsing library) to PATH
 export PATH="/usr/local/raptor/bin:$PATH"
-
