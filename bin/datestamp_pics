@@ -236,7 +236,7 @@ def do_camera(path, force=False):
 def main():
 
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(dest='action')
+    subparsers = parser.add_subparsers()
 
     p = subparsers.add_parser('remove_datestamp', help='Remove any existing datestamp prefix from files in a directory')
     p.add_argument('dirname')
@@ -256,9 +256,11 @@ def main():
     # parse command line args and pass as keyword args to func.
     args = parser.parse_args()
     kws = dict(vars(args))
-    del kws['func']
-    del kws['action']
-    return args.func(**kws)
+    if not kws:
+        parser.print_help()
+    else:
+        del kws['func']
+        return args.func(**kws)
 
 
 if __name__ == '__main__':
