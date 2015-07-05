@@ -225,7 +225,7 @@ export ORCHESTRA_USER=td23
 # http://tooky.github.com/2010/04/08/there-was-a-problem-with-the-editor-vi-git-on-mac-os-x.html
 # export EDITOR="/usr/local/bin/vim"
 # Fancy GUI editor
-export VISUAL=atom
+export VISUAL=vim
 # barebones terminal editor
 export EDITOR=vim
 # Use Sublime Text
