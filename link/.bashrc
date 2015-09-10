@@ -75,20 +75,6 @@ umask 002
 export GROUP=staff
 
 
-############################
-# Source configuration files
-
-# Includes .bash_prompt, .bash_aliases
-for f in ~/.bash.d/.bash_*; do
-  source $f;
-done
-
-# Includes .bash_aws_tfd, .bash_aws_sysmed, .bash_gitconfig, .bash_email, .bash_ddc_secrets
-for f in ~/.bash_secrets.d/.bash_*; do
-  source $f;
-done
-
-
 
 ########################
 # DOCKER and Boot2Docker
@@ -291,3 +277,19 @@ export PATH="$PATH:/Applications/Julia-0.2.1.app/Contents/Resources/julia/bin"
 
 # Add Raptor (RDF parsing library) to PATH
 export PATH="/usr/local/raptor/bin:$PATH"
+
+
+############################
+# Source configuration files
+
+# Includes .bash_prompt, .bash_aliases
+for f in ~/.bash.d/.bash_*; do
+  source $f;
+done
+
+# Includes .bash_aws_tfd, .bash_aws_sysmed, .bash_gitconfig, .bash_email, .bash_ddc_secrets
+for f in ~/.bash_secrets.d/.bash_*; do
+  source $f;
+done
+
+
