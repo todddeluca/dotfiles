@@ -46,12 +46,12 @@ if [ "$PS1" ]; then
 
   # make rm a little safer and more annoying
   alias rm='rm -i'
-  # spawns emacs in the shell, not in a separate window
-  # --no-site-file prevents semantic caching CEDET packages from loading, packages which were slowing emacs down and creating bugs.
+
   alias bsi='bsub -Ip -q cbi_int_12h bash'
   alias bsim='bsub -Is -q interactive -W 720 -R "rusage[mem=16384]" bash'
   alias bsim32='bsub -Is -q interactive -W 720 -R "rusage[mem=32768]" bash'
   alias bsim64='bsub -Is -q interactive -W 720 -R "rusage[mem=64000]" bash'
+
   # shortcuts to log into my favorite hosts
   # Orchestra!
   alias ssho='ssh td23@orchestra.med.harvard.edu'
@@ -59,6 +59,7 @@ if [ "$PS1" ]; then
   alias sshg='ssh genomekey@genomekey.com'
   # Semantic Database server on EC2
   alias sshs='ssh -i ~/.ssh/tfd_20120531.pem ubuntu@ec2-23-21-187-71.compute-1.amazonaws.com'
+
   # Remove backup and pyc files.  Use to reduce grep noise from backup files.
   alias findrm='find . -type f \( -name "*~" -or -name "*\\.pyc" -or -name ".DS_Store" \) -delete'
   alias findls='find . -type f \( -name "*~" -or -name "*\\.pyc" -or -name ".DS_Store" \)'
@@ -68,19 +69,26 @@ if [ "$PS1" ]; then
 
   # Source .bashrc shortcut
   alias sb="source $HOME/.bashrc"
+
   # Edit common things
   alias edb="$VISUAL $HOME/.bashrc"
   alias edba="$VISUAL $HOME/.bash.d/.bash_aliases"
-  alias edn='$VISUAL ~/Dropbox/notes/notes.txt'
-  alias eddn='$VISUAL $HOME/Dropbox/work/ddc/notes/ddc-notes.txt'
+  alias edn='mvim ~/Dropbox/notes/notes.txt'
+  alias eddn='mvim $HOME/Dropbox/work/ddc/notes/ddc-notes.txt'
   alias edtn='$VISUAL $HOME/proj/technotes'
   alias edsd='$VISUAL $HOME/Dropbox/work/ddc/notes/software_development.md'
 
+  # spawns emacs in the shell, not in a separate window
+  # --no-site-file prevents semantic caching CEDET packages from loading, packages which were slowing emacs down and creating bugs.
   alias ec='/Applications/Emacs.app/Contents/MacOS/bin/emacsclient'
   alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
   alias emacsn='emacs ~/Dropbox/notes/notes.txt'
   alias emacskd='ec -e "(kill-emacs)"'
   # alias emacs='open -a /Applications/Emacs.app'
+  # open emacs read only
+  ev() {
+    emacs "$1" --eval '(setq buffer-read-only t)'
+  }
 
   # convert dos or mac line endings to unix line endings, in place!
   # named after the real utility, dos2unix, which is not on my mac.
@@ -114,11 +122,6 @@ if [ "$PS1" ]; then
     find . -type d \( -name .git -o -name .idea -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -not -name '*.iml' -print0
   }
   alias findcode="find . -type d \( -name .git -o -name .idea -o -path '*target/*' -not -path '*generated-sources*' \) -prune -o -type f -not -name '*.jar' -not -name '*.iml' -print"
-
-  # open emacs read only
-  ev() {
-    emacs "$1" --eval '(setq buffer-read-only t)'
-  }
 
   # Make byobu faster and easier to type
   alias bu='byobu'

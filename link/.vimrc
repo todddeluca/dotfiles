@@ -147,7 +147,6 @@ set listchars+=extends:>          " The character to show in the last column whe
 set listchars+=precedes:<         " The character to show in the last column when wrap is
                                   " off and the line continues beyond the right of the screen
 
-
 """ Reading/Writing
 set noautowrite             " Never write a file unless I request it.
 set noautowriteall          " NEVER.
