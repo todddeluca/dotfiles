@@ -293,3 +293,4 @@ for f in ~/.bash_secrets.d/.bash_*; do
 done
 
 
+export PATH=~/npm-global/bin:$PATH

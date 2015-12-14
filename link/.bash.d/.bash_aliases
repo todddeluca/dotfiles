@@ -139,5 +139,5 @@ if [ "$PS1" ]; then
   alias prunelocal='git branch -r | awk '\''{print $1}'\'' | egrep -v -f /dev/fd/0 <(git branch -vv | grep origin) | awk '\''{print $1}'\'' | xargs git branch -d'
   # Prune remote branches that have been deleted on origin and then prune local branches that do not have a corresponding remote branch
   alias pruneddcgit='git remote prune origin && prunelocal'
-
+  alias fixbrew='sudo chown -R ddctoddd:admin /usr/local && chmod -R u+rw /usr/local'
 fi
