@@ -75,17 +75,6 @@ umask 002
 export GROUP=staff
 
 
-
-########################
-# DOCKER and Boot2Docker
-
-# Output of boot2docker init; boot2docker start; $(boot2docker shellinit)
-export DOCKER_HOST=tcp://192.168.59.103:2376
-export DOCKER_CERT_PATH=$HOME/.boot2docker/certs/boot2docker-vm
-export DOCKER_TLS_VERIFY=1
-
-
-
 #########################
 # Set up amazon ec2 tools
 export EC2_HOME=/Applications/ec2-api-tools-1.3-57419
