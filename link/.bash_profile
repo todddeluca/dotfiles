@@ -7,3 +7,6 @@ if [ -f ~/.bashrc ]; then
 fi
 
 
+
+# added by Anaconda3 5.0.0 installer
+export PATH="/Users/tfd/anaconda3/bin:$PATH"
