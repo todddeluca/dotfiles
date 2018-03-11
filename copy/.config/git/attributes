@@ -1,0 +1,4 @@
+# Strip output and metadata from jupyter notebooks before staging
+# http://timstaley.co.uk/posts/making-git-and-jupyter-notebooks-play-nice/
+*.ipynb filter=nbstrip_full
+
